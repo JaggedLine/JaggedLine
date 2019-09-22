@@ -1,0 +1,352 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+		<meta charset="utf-8">
+		<title> Jagged line </title>
+		<style>
+			body 
+			{
+				--d: 20px;
+				--seroburmalinovy: #5d6;
+				overflow-x: hidden;
+				font-family: 'Noto Sans JP', sans-serif;
+				margin: 0;
+				height: 0;
+			}
+			input
+			{
+				width: 80px;
+				text-align: center;
+				font-size: 30px;
+				border-width: 0;
+				background: transparent;
+				border-bottom: 4px double black;
+			}
+			input:focus
+			{
+				outline: 0;
+				/*border-color: blue;*/
+				background: rgba(0, 0, 0, .05);
+			}
+			input#student_name
+			{
+				width: 300px;
+			}
+			.node
+			{
+				position: absolute;
+				background: green;
+				border-radius: 50%;
+				width: var(--d);
+				height: var(--d);
+			}
+			.node:hover
+			{
+				background: blue;
+			}
+			.segment
+			{
+				position: absolute;
+				height: var(--d);
+				background: green;
+				border-radius: calc(var(--d) / 2);
+			}
+			.super_table
+			{
+				border: 1px solid black;
+				width: 80%;
+			}
+			.super_table td
+			{
+				padding-left: 5px;
+				padding-right: 5px;
+				border: 1px solid black;
+			}
+			.rg_button
+			{
+				background: linear-gradient(45deg, red, blue);
+				width: 350px;
+				height: 250px;
+				margin: 70px;
+				font-size: 30px;
+				/*box-shadow: 0px 0px 50px 50px orange;*/
+				border: 20px solid black;
+				border-top-width: 0;
+				border-left-width: 0;
+				border-right-color: grey;
+				/*cursor: no-drop;*/
+				cursor: not-allowed;
+			}
+			.rg_button:active
+			{
+				margin: 90px;
+				border-width: 0;
+				width: 330px;
+				height: 230px;
+				margin-bottom: 70px;
+			}
+			.rg_button:focus
+			{
+				outline: 0;
+			}
+            .lesha_style_for_rg_button
+            {
+                position: absolute;
+                left: 400px;
+                top: 70px;
+                width: 0px;
+                height: 0px;
+                z-index: 228;
+                border: 10px solid #ddd;
+                border-left-color: transparent;
+                border-bottom-color: transparent;
+	        }
+	        .lesha_style_for_rg_button_
+	        {
+	        	position: absolute;
+	        	left: 70px;
+	        	top: 300px;
+	        	width: 0px;
+	        	height: 0px;
+	        	z-index: 228;
+	        	border: 10px solid #ddd;
+	        	border-right-color: transparent;
+	        	border-top-color: transparent;
+	        }
+	        .rg_popup
+	        {
+	        	position: absolute;
+	        	z-index: 240;
+	        	top: 15%;
+	        	left: 20%;
+	        	width: calc(60% - 100px);
+	        	height: calc(70% - 100px);
+	        	border: 50px solid yellow;
+	        	border-radius: 100px;
+	        	text-align: center;
+	        	color: red;
+	        	font-size: 100px;
+	        	visibility: hidden;
+	            -ms-user-select: none;
+	            -moz-user-select: none;
+	            -khtml-user-select: none;
+	            -webkit-user-select: none;
+	        }
+	        .arrow_1
+	        {
+	        	position: absolute;
+	        	z-index: 240;
+	        	left: 80%;
+	        	visibility: hidden;
+	        }
+	        .rg_close
+	        {
+	        	position: absolute;
+	        	font-size: 30px;
+	        	background: transparent;
+	        	z-index: 240;
+	        }
+		</style>
+	</head>
+	<body>
+		<table style="height: 0">
+			<tr>
+				<td>
+				<div id="field" style="position: absolute; top: 50px; left: 50px; display: table">
+					<div id="segments"></div>
+					<div id="nodes"></div>
+				</div>
+			</td>
+			<td>
+				<div style="position:absolute; right: 0%; width: 30%; padding-left: 40px; background: #dddddd">
+					<h2>
+						<div style="position: relative"	>
+							<button id="rg_button" class="rg_button"> Роман Валерьевич, не нажимайте на эту кнопочку!!! </button>
+							<div class="lesha_style_for_rg_button"></div>
+							<div class="lesha_style_for_rg_button_"></div>
+						</div>
+						<div style="display: flex; flex-flow: row">
+							<table style="flex: 2.5">
+								<tr><td>Field size:</td><td><input id="inputSizeY" value=5></td><td><input id="inputSizeX" value=7></td></tr>
+								<tr><td>Start node:</td><td><input id="inputStartY" value=0></td><td><input id="inputStartX" value=0></td></tr>
+								<tr><td>End node:</td><td><input id="inputEndY" value=1></td><td><input id="inputEndX" value=1></td></tr>
+							</table>
+							<span style="flex: 0.2"></span>
+							<div style="flex: 1; display: flex; flex-flow: column">
+								<span style="flex: 3"></span>
+								<button id='changeSettings' style="flex: 1.4">Apply</button>
+								<span style="flex: 3"></span>
+							</div>
+							<span style="flex: 0.2"></span>
+						</div><br>
+						Sliver name: <input id="student_name" style="font-size: 30px; padding: 3px; padding-left: 10px" value="Vanyok" spellcheck="false"><br><br><br>
+						Score: ~<span id="score">0</span><br><br><br>
+						Results: <table id="scores" class="super_table">
+							<tr><td style='text-align: center;'>#</td><td>Sliver</td><td style='text-align: center;'>Score</td></tr>
+						</table>
+					</h2>
+				</div>
+				<script src="jagged_line.js"></script>
+			</td></tr>
+		</table>
+		<div id="rg_background" style="z-index: 230; position: fixed; width: 100%; height: 100%; background:rgba(127, 127, 127, .5); visibility: hidden"></div>
+		<div id="rg_popup" class="rg_popup">
+			Роман Валерьевич!<br>
+			ТОЛЬКО НЕ НАЖИМАЙТЕ НА КНОПКУ СПРАВА!!!<br>
+			<button id="rg_lol" class="rg_close" onclick='pause_rg_disco()'>Отвалить</button>
+			<button id="rg_kek" class="rg_close" onclick='pause_rg_disco()'>Отвалить</button>
+			<button id="rg_cheburek" class="rg_close" onclick='pause_rg_disco()'>Отвалить</button>
+		</div>
+		<div id="arrow_1" class="arrow_1">
+			<img src='arrow.png'>
+		</div>
+	</body>
+	<script>
+		var t = 0, cw = 10;
+		function rg_disco()
+		{
+			rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'visible';
+		}
+		function pause_rg_disco()
+		{
+			rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'hidden';
+		}
+		setInterval(function() {rg_button.style.background = 'linear-gradient(' + cw * t++ + 'deg, red, blue)'}, 30);
+		setInterval(function() {rg_popup.style.background = 'linear-gradient(' + 30 * cw * Math.sin(t / 10) + 'deg, #08f, #0f8)'}, 30);
+		rg_button.onclick = function() {cw = -cw;}
+		setInterval(rg_disco, 30000); //30s
+		setInterval(function() {arrow_1.style.top = (45 + 10*Math.sin(10*Math.sin(t/20))) + '%';}, 30);
+		setInterval(function()
+		{
+			rg_lol.style.left = (50 + 10 * Math.tan(t/25)) + '%', rg_lol.style.top = (50 + 25 * Math.sin(t/11.56239)) + '%';
+			rg_kek.style.left = (50 - 20 * Math.tan(t/20)) * Math.sin(t/1000) + '%', rg_kek.style.top = (50 + 35 * Math.sin(t/13.52735)) + '%';
+			rg_cheburek.style.left = (50 + 13 * Math.tan(t/17)) + '%', rg_cheburek.style.top = (50 + 50 * Math.sin(t/27.34952)) + '%';
+		}, 30);
+
+		rg_button.onclick = function mega_epic()
+		{
+			console.log('MEGA EPIC ACTION STARTED\n');
+			//score.innerHTML = 10 + (score.innerHTML)*1;	
+			function fedroFindMax(n, m, x1, y1, x2, y2, drawFunction)
+			{
+				let dirx = new Array(1, 1, 2, 2, -1, -1, -2, -2);
+				let diry = new Array(2, -2, 1, -1, 2, -2, 1, -1);
+				let pathx = new Array();
+				let pathy = new Array();
+				let anspathx = new Array();
+				let anspathy = new Array();
+				let used = new Array(n);
+				let max_answer = 0;
+
+				function crossProduct(x1, y1, x2, y2)
+				{
+					return x1 * y2 - x2 * y1;
+				}
+
+				function lessPoint(x1, y1, x2, y2)
+				{
+					return x1 < x2 ? [x1, y1] : x1 > x2 ? [x2, y2] : y1 < y2 ? [x1, y1] : [x2, y2];
+				}
+
+				function segmentsIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
+				{
+					let p1 = crossProduct(x2 - x1, y2 - y1, x3 - x1, y3 - y1);
+					let p2 = crossProduct(x2 - x1, y2 - y1, x4 - x1, y4 - y1);
+					let p3 = crossProduct(x4 - x3, y4 - y3, x1 - x3, y1 - y3);
+					let p4 = crossProduct(x4 - x3, y4 - y3, x2 - x3, y2 - y3);
+					if (p1 * p2 == 0 && p3 * p4 == 0) {
+						return false;
+					}
+					if (p1 * p2 <= 0 && p3 * p4 <= 0) {
+						return true;
+					}
+					return false;
+				}
+
+				let global_ops = 0;
+
+				function recursiveGen()
+				{
+					if (++global_ops % 1000 == 0)
+					{
+						//clear_all_kek228();
+						// for (let i = 0; i < pathx.length - 1; ++i)
+						// 	drawFunction(pathx[i], pathy[i], pathx[i+1], pathy[i+1]);
+					}
+					let lastx = pathx[pathx.length - 1];
+					let lasty = pathy[pathy.length - 1];
+					// console.log(lastx, lasty, x2, y2, pathx.length);
+					if (lastx == x2 && lasty == y2 && max_answer < pathx.length - 1) {
+						max_answer = pathx.length - 1;
+						anspathx = pathx.slice(0);
+						anspathy = pathy.slice(0);
+					}
+					if (lastx == x2 && lasty == y2) return;
+					for (let rot = 0; rot < dirx.length; rot++) {
+						let nextx = lastx + dirx[rot];
+						let nexty = lasty + diry[rot];
+						if (nextx < 0 || nextx >= n || nexty < 0 || nexty >= m) {
+							continue;
+						}
+						if (used[nextx][nexty]) {
+							continue;
+						}
+						let f = false;
+						for (let id = 0; id < pathx.length - 1; id++) {
+							if (segmentsIntersect(pathx[id], pathy[id], pathx[id + 1], pathy[id + 1], lastx, lasty, nextx, nexty)) {
+								f = true;
+								break;
+							}
+						}
+						if (f) continue;
+						pathx.push(nextx);
+						pathy.push(nexty);
+						used[nextx][nexty] = true;
+						recursiveGen();
+						used[nextx][nexty] = false;
+						pathx.pop();
+						pathy.pop();
+					}
+				}
+
+				for (let i = 0; i < n; i++) {
+					used[i] = new Array(m);
+					for (let j = 0; j < m; j++) {
+						used[i][j] = false;
+					}
+				}
+				used[x1][y1] = true;
+				pathx.push(x1);
+				pathy.push(y1);
+				anspathx.push(x1);
+				anspathy.push(y1);
+				Tbl.clear_table();
+				recursiveGen(x2, y2);
+				Tbl.clear_table();
+				for (let id = 0; id < anspathx.length - 1; id++) {
+					drawFunction(anspathx[id], anspathy[id], anspathx[id + 1], anspathy[id + 1]);
+				}
+				return max_answer;
+			}
+			let n = Tbl.sizeY, m = Tbl.sizeX, x1 = Tbl.start_point[0], y1 = Tbl.start_point[1], x2 = Tbl.end_point[0], y2 = Tbl.end_point[1];
+			let fedro_answer = fedroFindMax(
+				n*1, m*1, y1*1, x1*1, y2*1, x2*1, (x1, y1, x2, y2) => Tbl.add_segment(y2, x2));
+		}
+
+		var T = 200;
+		function rg_disco()
+		{
+
+		}
+
+		function clear_all_kek228()
+		{
+			segments.innerHTML = '';
+			score.innerHTML = '0';
+			Tbl.points = [];
+			Tbl.lines_cnt = 0;
+		}
+	</script>
+</html>
