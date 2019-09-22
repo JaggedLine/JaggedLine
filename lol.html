@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <style>
+            .vector_arrow
+            {
+                position: absolute;
+                height: 6px;
+                border-radius: 3px;
+                background: orange;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="vector_field" style="background: grey; position: fixed; top: 0; left: 0; width: 100%; height: 100%"></div>
+        <script>
+            function Fx(x, y) {return x * x / 400 - y * 2;}
+            function Fy(x, y) {return y - x * y / 500 + x * y * y / 200000;}
+
+            function draw_lol_segment(x1, y1, x2, y2)
+            {
+                let xd = x2 - x1, yd = y2 - y1, len = Math.sqrt(xd ** 2 + yd ** 2) + 6, alpha = Math.atan2(yd, xd);
+                let x = (x1 + x2 - len) / 2, y = (y1 + y2) / 2 - 3;
+                let idea = 'width: ' + len + 'px; transform: rotate(' + alpha * 180 / Math.PI + 'deg); top: ' + y + 'px; left: ' + x + 'px';
+                vector_field.innerHTML += '<div style="' + idea + '" class="vector_arrow"></div>';
+            }
+            function draw_lol_arrow(x1, y1, x2, y2)
+            {
+                draw_lol_segment(x1, y1, x2, y2);
+                let x = (x2 - x1) / 10, y = (y2 - y1) / 10;
+                draw_lol_segment(x2, y2, x2 - x - y, y2 + x - y);
+                draw_lol_segment(x2, y2, x2 - x + y, y2 - x - y);
+            }
+            function draw_lol_field()
+            {
+                for (let i = 0; i < 10; ++i)
+                    for (let j = 0; j < 20; ++j)
+                        draw_lol_arrow(j * 100, i * 100, j * 100 + Fx(j*100,i*100) / 20, i * 100 + Fy(j*100,i*100) / 20);
+            }
+            draw_lol_field();
+        </script>
+    </body>
+</html>
