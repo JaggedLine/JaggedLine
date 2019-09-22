@@ -181,8 +181,8 @@
 							</div>
 							<span style="flex: 0.2"></span>
 						</div><br>
-						Sliver name: <input id="student_name" style="font-size: 30px; padding: 3px; padding-left: 10px" value="Vanyok" spellcheck="false"><br><br><br>
-						Score: ~<span id="score">0</span><br><br><br>
+						Sliver name: <input id="student_name" style="font-size: 30px; padding: 3px; padding-left: 10px" value="Vanyok" spellcheck="false"><br><br>
+						Score: ~<span id="score">0</span><br><br>
 						Results: <table id="scores" class="super_table">
 							<tr><td style='text-align: center;'>#</td><td>Sliver</td><td style='text-align: center;'>Score</td></tr>
 						</table>
@@ -204,6 +204,12 @@
 		</div>
 	</body>
 	<script>
+		let Tbl = new Table();
+		changeSettings.onclick = function () {
+			Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
+		}
+		Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
+
 		var t = 0, cw = 10;
 		function rg_disco()
 		{
@@ -216,7 +222,7 @@
 		setInterval(function() {rg_button.style.background = 'linear-gradient(' + cw * t++ + 'deg, red, blue)'}, 30);
 		setInterval(function() {rg_popup.style.background = 'linear-gradient(' + 30 * cw * Math.sin(t / 10) + 'deg, #08f, #0f8)'}, 30);
 		rg_button.onclick = function() {cw = -cw;}
-		setInterval(rg_disco, 30000); //30s
+		setInterval(rg_disco, 3000000); //30s
 		setInterval(function() {arrow_1.style.top = (45 + 10*Math.sin(10*Math.sin(t/20))) + '%';}, 30);
 		setInterval(function()
 		{
@@ -334,19 +340,24 @@
 			let fedro_answer = fedroFindMax(
 				n*1, m*1, y1*1, x1*1, y2*1, x2*1, (x1, y1, x2, y2) => Tbl.add_segment(y2, x2));
 		}
-
-		var T = 200;
-		function rg_disco()
-		{
-
+		function showPath(gameCnt) {
+			console.log('SHOW')
+			showPathTbl = new Table();
+			showPathTbl.id = gameCnt;
+			showPathTbl.show_score = false;
+			showPathTbl.segments_color = 'yellow';
+			points = JSON.parse(d.getElementById('game_'+gameCnt).getAttribute('jagged_line'));
+			showPathTbl.start_point = points[0];
+			showPathTbl.points = [points[0]];
+			for (let n = 1; n < points.length; n++) {
+				showPathTbl.add_segment(points[n][0], points[n][1]);
+			}
+			return showPathTbl;
+		}
+		function hidePath(table) {
+			table.clear_table();
 		}
 
-		function clear_all_kek228()
-		{
-			segments.innerHTML = '';
-			score.innerHTML = '0';
-			Tbl.points = [];
-			Tbl.lines_cnt = 0;
-		}
+
 	</script>
 </html>

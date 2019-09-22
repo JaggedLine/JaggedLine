@@ -1,4 +1,6 @@
 var d = document;
+let xxx;
+let yyy = false;
 
 function segments_intersect(x1, y1, x2, y2, x3, y3, x4, y4) // true if intersects
 {
@@ -30,24 +32,28 @@ class Table {
 		this.points = new Array();
 		this.sz = 60;
 		this.games_cnt = 0;
-		this.width = 20
+		this.width = 20;
+		this.show_score = true;
+		this.segments_color = 'green'
+		this.id = 'main'
 
-		let table = this
+		let table = this;
 		this.draw_segment_animations = {
 			no_animation: function (x1, y1, x2, y2) // real coordinates 
 				{	
 					var xc = (x1 + x2) / 2, yc = (y1 + y2) / 2;
 					var len = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.width;
 					var ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
-					var segment_style = 'transform: rotate(' + ang + 'deg); width: ' + len + 'px; top: ' + yc + 'px; left: ' + (xc - len / 2 + table.width / 2) + 'px';
-					segments.innerHTML += '<div id="segment_' + table.lines_cnt() + '" class="segment" style="' + segment_style + '""></div>';
+					var segment_style = 'background: '+table.segments_color+'; transform: rotate(' + ang + 'deg); width: ' + len + 'px; top: ' + yc + 'px; left: ' + (xc - len / 2 + table.width / 2) + 'px';
+					segments.innerHTML += '<div id="segment_'+table.id+'_' + table.lines_cnt() + '" class="segment" style="' + segment_style + '""></div>';
 				},
 			linear_animation: function (x1, y1, x2, y2) 
 				{
 					table.busy = true;
 					var ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
-					segments.innerHTML += '<div id="segment_' + table.lines_cnt() + '" class="segment" style="transform: rotate(' + ang + 'deg)"></div>';
-					let segment = d.getElementById('segment_' + table.lines_cnt());
+					segments.innerHTML += '<div id="segment_'+table.id+'_' + table.lines_cnt() + '"; background: '+table.segments_color+'; class="segment" style="transform: rotate(' + ang + 'deg)"></div>';
+					let segment = table.segment(table.lines_cnt());
+					console.log(table.lines_cnt(), segment);
 
 					function timer(t) {
 						if (t >= 1.05) {
@@ -68,7 +74,7 @@ class Table {
 		this.destroy_segment_animation = {
 			no_animation: function (N) 
 				{
-					segments.removeChild(d.getElementById('segment_' + (table.lines_cnt() - 1)));
+					segments.removeChild(table.segment(table.lines_cnt() - 1));
 					table.points.pop();
 					table.update_score();
 					if (N > 1) {table.destroy_segment_animation.no_animation(N - 1);}
@@ -76,13 +82,13 @@ class Table {
 			linear_animation: function (N, past = 0) 
 				{
 					table.busy = true;
-					let segment = d.getElementById('segment_' + (table.lines_cnt() - 1));
+					let segment = table.segment((table.lines_cnt() - 1));
 					let x2 = table.points[table.lines_cnt()][0] * table.sz, y2 = table.points[table.lines_cnt()][1] * table.sz;
 					let x1 = table.points[table.lines_cnt() - 1][0] * table.sz, y1 = table.points[table.lines_cnt() - 1][1] * table.sz;		
 
 					function timer(t) {
 						if (t <= 0) {
-							segments.removeChild(d.getElementById('segment_' + (table.lines_cnt() - 1)));
+							segments.removeChild(table.segment(table.lines_cnt() - 1));
 							table.points.pop();
 							table.update_score();
 							if (N > 1) {
@@ -104,32 +110,37 @@ class Table {
 			lesha_animation: function (N, past = 0) 
 				{
 					table.busy = true;
-					let segment = d.getElementById('segment_' + (table.points.length - 2));
-					let x2 = table.points[table.points.length - 1][0] * table.sz, y2 = table.points[table.points.length - 1][1] * table.sz;
-					let x1 = table.points[table.points.length - 2][0] * table.sz, y1 = table.points[table.points.length - 2][1] * table.sz;		
-					// let width = 0;
+					let segment = table.segment((table.lines_cnt() - 1));
+					let x2 = table.points[table.lines_cnt()][0] * table.sz, y2 = table.points[table.lines_cnt()][1] * table.sz;
+					let x1 = table.points[table.lines_cnt() - 1][0] * table.sz, y1 = table.points[table.lines_cnt() - 1][1] * table.sz;		
 
 					function timer(t) {
 						if (t <= 0) {
-							segments.removeChild(d.getElementById('segment_' + (table.points.length - 2)));
+							segments.removeChild(table.segment(table.lines_cnt() - 1));
 							table.points.pop();
+							table.update_score();
 							if (N > 1) {
-								table.animated_destroy_segment_2(N - 1, f, past + 1);
+								table.destroy_segment_animation.lesha_animation(N - 1, past + 1);
 							} else {
 								table.busy = false;
 							}
 							return;
 						}
 						setTimeout(() => timer(t - 0.05 * (1 + Math.min(N - t, past + t))), 10);
-						var xc = x1 * (1 - f(t)) + ((x1 + x2) / 2) * f(t), yc = y1 * (1 - f(t)) + ((y1 + y2) / 2) * f(t);`x2`
-						talbe.update_score();
+						var xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
 						segment.style.top = yc + 'px';
 					} 
 					timer(1);
-				}
+				},
 
 			};
 		}
+
+	segment(n) 
+	{
+		console.log('segment_'+this.id+'_'+n);
+		return d.getElementById('segment_'+this.id+'_'+n);
+	}
 
 	lines_cnt()
 	{
@@ -138,12 +149,22 @@ class Table {
 
 	update_score()
 	{
-		score.innerHTML = this.lines_cnt();
+		if (this.show_score) {
+			score.innerHTML = this.lines_cnt();
+		}
 	}
 
 	clear_table() 
 	{
-		segments.innerHTML = '';
+		let for_delete = [];
+		for (let child of segments.children) {
+			if (child.getAttribute('id').startsWith('segment_' + this.id + '_')) {
+				for_delete.push(child)
+			}
+		}
+		for (let child of for_delete) {
+			segments.removeChild(child);
+		}
 		this.points = [this.start_point];
 		this.update_score();
 	}
@@ -176,13 +197,6 @@ class Table {
 		d.getElementById('node_' + end_point[1] + '_' + end_point[0]).style.background = 'red';
 	}
 
-	add_segment_kek(x1, y1, x2, y2)
-	{
-		this.points.push([y2, x2]);
-		score.innerHTML = this.lines_cnt - 1;
-		this.draw_segment(y1 * this.sz, x1 * this.sz, y2 * this.sz, x2 * this.sz, 20);
-	}
-
 	add_segment(x, y, animation_mode = this.draw_segment_animations.no_animation)
 	{
 		let last_x = this.points[this.lines_cnt()][0];
@@ -204,6 +218,7 @@ class Table {
 		this.update_score();
 		return false;
 	}
+
 }
 
 function f_click_1(j, i, table)
@@ -212,7 +227,7 @@ function f_click_1(j, i, table)
 	let last_y = table.points[table.lines_cnt()][1];
 	len = table.lines_cnt();
 
-	if (table.destroy_segments(j, i, table.destroy_segment_animation.linear_animation)) {return;}
+	if (table.destroy_segments(j, i, table.destroy_segment_animation.lesha_animation)) {return;}
 
 	for (let n = 1; n <= len; ++n) {
 		if (segments_intersect(j, i, last_x, last_y, table.points[n-1][0], table.points[n-1][1], table.points[n][0], table.points[n][1])) {
@@ -229,10 +244,14 @@ function f_click_1(j, i, table)
 	table.add_segment(j, i, table.draw_segment_animations.linear_animation);
 
 	if (i == table.end_point[1] && j == table.end_point[0]) {
-		console.log('Win!');
 		setTimeout(function() {
 			alert(student_name.value + ', your score is ' + table.lines_cnt())
-			scores.innerHTML += '<tr><td style="text-align: center;">' + ++table.games_cnt + '</td><td>' + student_name.value + '</td><td style="text-align: center;">' + table.lines_cnt() + '</td></tr>';
+			scores.innerHTML += '<tr><td id="game_'+table.games_cnt+'" style="text-align: center;">' + table.games_cnt + '</td><td>' + student_name.value + '</td><td style="text-align: center;">' + table.lines_cnt() + '</td><td><button id="show_path_'+table.games_cnt++ +'">Eye</button></td></tr>';
+			d.getElementById('game_'+(table.games_cnt-1)).setAttribute('jagged_line', JSON.stringify(table.points));
+			for (let i = 0; i < table.games_cnt; i++) {
+				d.getElementById('show_path_'+i).addEventListener('mousedown', function() {xxx = showPath(i); yyy = true;})
+			}
+			d.addEventListener('mouseup', function() {if(yyy) {hidePath(xxx); yyy=false}})
 			student_name.value = student_name.value == 'Vanyok' ? 'Feduk' : student_name.value == 'Feduk' ? 'Lesha' : 'Vanyok';
 			table.clear_table();
 		}, 300)
@@ -274,10 +293,3 @@ function f_click_2(j, i, table)
 		}, 300);
 	}
 }
-
-
-let Tbl = new Table();
-changeSettings.onclick = function () {
-	Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
-}
-Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
