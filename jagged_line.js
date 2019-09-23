@@ -53,7 +53,6 @@ class Table {
 					var ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
 					segments.innerHTML += '<div id="segment_'+table.id+'_' + table.lines_cnt() + '"; background: '+table.segments_color+'; class="segment" style="transform: rotate(' + ang + 'deg)"></div>';
 					let segment = table.segment(table.lines_cnt());
-					console.log(table.lines_cnt(), segment);
 
 					function timer(t) {
 						if (t >= 1.05) {
@@ -66,6 +65,28 @@ class Table {
 						segment.style.width = len + 'px';
 						segment.style.top = yc + 'px';
 						segment.style.left = (xc - len / 2 + table.width / 2) + 'px';
+					} 
+					timer(0);
+				},
+			lesha_animation: function (x1, y1, x2, y2) 
+				{
+					table.busy = true;
+					var ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+					segments.innerHTML += '<div id="segment_'+table.id+'_' + table.lines_cnt() + '"; background: '+table.segments_color+'; class="segment" style="transform: rotate(' + ang + 'deg)"></div>';
+					let segment = table.segment(table.lines_cnt());
+
+					function timer(t) {
+						if (t >= 1.05) {
+							table.busy = false;
+							return;
+						}
+						setTimeout(() => timer(t + 0.05), 10);
+						var xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
+						var len1 = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.width) * 1;
+						var len2 = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.width) * t;
+						segment.style.width = len2 + 'px';
+						segment.style.top = yc + 'px';
+						segment.style.left = (xc - len1 / 2 + table.width / 2) + 'px';
 					} 
 					timer(0);
 				}
@@ -128,7 +149,9 @@ class Table {
 						}
 						setTimeout(() => timer(t - 0.05 * (1 + Math.min(N - t, past + t))), 10);
 						var xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
+						var len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.width) * t;
 						segment.style.top = yc + 'px';
+						segment.style.width = len + 'px';
 					} 
 					timer(1);
 				},
@@ -138,7 +161,6 @@ class Table {
 
 	segment(n) 
 	{
-		console.log('segment_'+this.id+'_'+n);
 		return d.getElementById('segment_'+this.id+'_'+n);
 	}
 
@@ -246,7 +268,7 @@ function f_click_1(j, i, table)
 	if (i == table.end_point[1] && j == table.end_point[0]) {
 		setTimeout(function() {
 			alert(student_name.value + ', your score is ' + table.lines_cnt())
-			scores.innerHTML += '<tr><td id="game_'+table.games_cnt+'" style="text-align: center;">' + table.games_cnt + '</td><td>' + student_name.value + '</td><td style="text-align: center;">' + table.lines_cnt() + '</td><td><button id="show_path_'+table.games_cnt++ +'">Eye</button></td></tr>';
+			scores.innerHTML += '<tr><td id="game_'+table.games_cnt+'" style="text-align: center;">' + table.games_cnt + '</td><td>' + student_name.value + '</td><td style="text-align: center;">' + table.lines_cnt() + '<button style="float:right;" id = "show_path_' + table.games_cnt++ + '"><img src="eye.png" style="width: 30px; height: 30px"></button></td></tr>';
 			d.getElementById('game_'+(table.games_cnt-1)).setAttribute('jagged_line', JSON.stringify(table.points));
 			for (let i = 0; i < table.games_cnt; i++) {
 				d.getElementById('show_path_'+i).addEventListener('mousedown', function() {xxx = showPath(i); yyy = true;})
@@ -264,7 +286,7 @@ function f_click_2(j, i, table)
 	let last_y = table.points[table.lines_cnt()][1];
 	len = table.lines_cnt();
 
-	if (table.destroy_segments(j, i, table.destroy_segment_animation.linear_animation)) {return;}
+	if (table.destroy_segments(j, i, table.destroy_segment_animation.lesha_animation)) {return;}
 
 	for (let n = 1; n <= len; ++n) {
 		if (segments_intersect(j, i, last_x, last_y, table.points[n-1][0], table.points[n-1][1], table.points[n][0], table.points[n][1])) {
