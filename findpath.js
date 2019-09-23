@@ -100,12 +100,3 @@ function fedroFindMax(n, m, x1, y1, x2, y2, drawFunction)
     return max_answer;
 }
 
-rg_button.onclick = function mega_epic()
-{
-    console.log('MEGA EPIC ACTION STARTED\n');
-    rg_popup_2.style.visibility = 'visible';
-    //score.innerHTML = 10 + (score.innerHTML)*1;
-    let n = Tbl.sizeY, m = Tbl.sizeX, x1 = Tbl.start_point[0], y1 = Tbl.start_point[1], x2 = Tbl.end_point[0], y2 = Tbl.end_point[1];
-    let fedro_answer = fedroFindMax(
-        n * 1, m * 1, y1 * 1, x1 * 1, y2 * 1, x2 * 1, (x1, y1, x2, y2) => Tbl.add_segment(y2, x2));
-}

@@ -89,6 +89,7 @@
 	</body>
 	<script src="table.js"></script>
 	<script src="worker.js"></script>
+	<script src="findpath.js"></script>
 	<script>
 		var d = document;
 
@@ -138,9 +139,17 @@
 
 		var rg_rotation = 0, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable', is_computed = 'No!';
 		var computing_worker;
+		function mega_epic(Tbl)
+		{
+			//score.innerHTML = 10 + (score.innerHTML)*1;
+			let n = Tbl.sizeY, m = Tbl.sizeX, x1 = Tbl.start_point[0], y1 = Tbl.start_point[1], x2 = Tbl.end_point[0], y2 = Tbl.end_point[1];
+			let fedro_answer = fedroFindMax(
+				n * 1, m * 1, y1 * 1, x1 * 1, y2 * 1, x2 * 1, (x1, y1, x2, y2) => Tbl.add_segment(y2, x2));
+		}
+
 		function rg_button_pressed()
 		{
-			computing_worker = new Worker(URL.createObjectURL(new Blob(["("+do_heavy_computations.toString()+")()"], {type: 'text/javascript'})));
+			computing_worker = new Worker(URL.createObjectURL(new Blob(["("+mega_epic.toString()+")(Tbl)"], {type: 'text/javascript'})));
 			computing_worker.onmessage = function(event)
 			{
 				is_computed = event.data;
