@@ -1,4 +1,4 @@
-async function fedroFindMax(n, m, x1, y1, x2, y2, drawFunction)
+function fedroFindMax(n, m, x1, y1, x2, y2, drawFunction)
 {
     let dirx = new Array(1, 1, 2, 2, -1, -1, -2, -2);
     let diry = new Array(2, -2, 1, -1, 2, -2, 1, -1);

@@ -88,9 +88,10 @@
 		</div>
 	</body>
 	<script src="table.js"></script>
-	<!--<script async src="findpath.js"></script>-->
 	<script src="worker.js"></script>
 	<script>
+		var d = document;
+
 		let Tbl = new Table();
 		changeSettings.onclick = function () {
 			Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
@@ -135,7 +136,7 @@
 			table.clear_table();
 		}
 
-		var rg_rotation = 0, d = document, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable', is_computed = 'No!';
+		var rg_rotation = 0, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable', is_computed = 'No!';
 		var computing_worker;
 		function rg_button_pressed()
 		{

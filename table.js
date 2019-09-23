@@ -1,4 +1,3 @@
-var d = document;
 let xxx;
 let yyy = false;
 
