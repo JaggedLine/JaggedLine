@@ -1,0 +1,157 @@
+body 
+{
+    --d: 20px;
+    --seroburmalinovy: #5d6;
+    overflow-x: hidden;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0;
+    height: 0;
+}
+input
+{
+    width: 80px;
+    text-align: center;
+    font-size: 30px;
+    border-width: 0;
+    background: transparent;
+    border-bottom: 4px double black;
+}
+input:focus
+{
+    outline: 0;
+    /*border-color: blue;*/
+    background: rgba(0, 0, 0, .05);
+}
+input#student_name
+{
+    width: 300px;
+}
+.node
+{
+    position: absolute;
+    background: green;
+    border-radius: 50%;
+    width: var(--d);
+    height: var(--d);
+}
+.node:hover
+{
+    background: blue;
+}
+.segment
+{
+    position: absolute;
+    height: var(--d);
+    background: green;
+    border-radius: calc(var(--d) / 2);
+}
+.super_table
+{
+    border: 1px solid black;
+    width: 80%;
+}
+.super_table td
+{
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid black;
+}
+.rg_button
+{
+    background: linear-gradient(45deg, red, blue);
+    width: 350px;
+    height: 250px;
+    margin: 70px;
+    font-size: 30px;
+    /*box-shadow: 0px 0px 50px 50px orange;*/
+    border: 20px solid black;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-color: grey;
+    /*cursor: no-drop;*/
+    cursor: not-allowed;
+}
+.rg_button:active
+{
+    margin: 90px;
+    border-width: 0;
+    width: 330px;
+    height: 230px;
+    margin-bottom: 70px;
+}
+.rg_button:focus
+{
+    outline: 0;
+}
+.lesha_style_for_rg_button
+{
+    position: absolute;
+    left: 400px;
+    top: 70px;
+    width: 0px;
+    height: 0px;
+    z-index: 228;
+    border: 10px solid #ddd;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+}
+.lesha_style_for_rg_button_
+{
+    position: absolute;
+    left: 70px;
+    top: 300px;
+    width: 0px;
+    height: 0px;
+    z-index: 228;
+    border: 10px solid #ddd;
+    border-right-color: transparent;
+    border-top-color: transparent;
+}
+.rg_popup
+{
+    position: absolute;
+    z-index: 240;
+    top: 15%;
+    left: 20%;
+    width: calc(60% - 100px);
+    height: calc(70% - 100px);
+    border: 50px solid yellow;
+    border-radius: 100px;
+    text-align: center;
+    color: red;
+    font-size: 100px;
+    visibility: hidden;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+}
+.rg_popup_2
+{
+    position: absolute;
+    z-index: 240;
+    left: calc(20% - 30px);
+    top: calc(15% - 30px);
+    width: 60%;
+    height: 70%;
+    border: 30px solid black;
+    border-radius: 60px;
+    text-align: center;
+    color: #fc0;
+    background: grey;
+    visibility: hidden;
+}
+.arrow_1
+{
+    position: absolute;
+    z-index: 240;
+    left: 80%;
+    visibility: hidden;
+}
+.rg_close
+{
+    position: absolute;
+    font-size: 30px;
+    background: transparent;
+    z-index: 240;
+}
