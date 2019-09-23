@@ -88,7 +88,8 @@
 		</div>
 	</body>
 	<script src="table.js"></script>
-	<script async src="findpath.js"></script>
+	<!--<script async src="findpath.js"></script>-->
+	<script src="worker.js"></script>
 	<script>
 		let Tbl = new Table();
 		changeSettings.onclick = function () {
@@ -107,7 +108,7 @@
 		}
 		setInterval(function() {rg_button.style.background = 'linear-gradient(' + cw * t++ + 'deg, red, blue)'}, 30);
 		setInterval(function() {rg_popup.style.background = 'linear-gradient(' + 30 * cw * Math.sin(t / 10) + 'deg, #08f, #0f8)'}, 30);
-		rg_button.onclick = function() {cw = -cw;}
+		rg_button.onclick = function() {cw = -cw; rg_button_pressed();}
 		setInterval(rg_disco, 3000000); //30s
 		setInterval(function() {arrow_1.style.top = (45 + 10*Math.sin(10*Math.sin(t/20))) + '%';}, 30);
 		setInterval(function()
@@ -134,17 +135,19 @@
 		function hidePath(table) {
 			table.clear_table();
 		}
-	</script>
-	<script>
-		var rg_rotation = 0, d = document, rg_function = rg_rotation_mode_1;
-		setInterval(function()
+
+		var rg_rotation = 0, d = document, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable', is_computed = 'No!';
+		var computing_worker;
+		function rg_button_pressed()
 		{
-			rg_ava.style.transform = "rotate(" + rg_function(rg_rotation++) + "deg)";
-			rg_finding.style.color = rg_rotation % 10 < 5 ? '#fc0' : 'transparent';
-		}, 50);
-	
-		var rg_hanging_angle, rg_last_mode = 'stable';
-		function rg_rotation_mode_0(t) {return rg_hanging_angle;};
+			computing_worker = new Worker(URL.createObjectURL(new Blob(["("+do_heavy_computations.toString()+")()"], {type: 'text/javascript'})));
+			computing_worker.onmessage = function(event)
+			{
+				is_computed = event.data;
+			}
+			rg_popup_2.style.visibility = "visible";
+		}
+
 		function rg_rotation_mode_1(t) {return t * 5;}
 		function rg_rotation_mode_2(t) {return 45 * Math.sin(t * .4);}
 		function rg_rotation_mode_3(t) {return 45 * Math.sin(5 * Math.sin(t / 10));}
@@ -167,5 +170,14 @@
 			}
 			rg_last_mode = epic;
 		}
+
+		setInterval(function()
+		{
+			console.log(3);
+			rg_ava.style.transform = "rotate(" + rg_function(rg_rotation++) + "deg)";
+			rg_finding.style.color = rg_rotation % 10 < 5 ? '#fc0' : 'transparent';
+			if (is_computed != 'No!')
+				alert(is_computed), computing_worker.terminate(), is_computed = 'No!', rg_popup_2.style.visibility = "hidden";
+		}, 50);
 	</script>
 </html>
