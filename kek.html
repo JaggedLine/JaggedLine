@@ -1,82 +1,61 @@
-<html>
-    <head>
-        <style>
-            .rg_popup_2
-            {
-                position: absolute;
-                left: calc(20% - 30px);
-                top: calc(15% - 30px);
-                width: 60%;
-                height: 70%;
-                border: 30px solid black;
-                border-radius: 60px;
-                text-align: center;
-                color: #fc0;
-                background: grey;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="rg_popup_2" class="rg_popup_2">
-            <div style="height: 100%; display:flex; flex-flow: column">
-                <div style="padding-top: 20px; display: flex; flex-flow: row">
-                    <div id="rg_finding" style="flex: 1; font-size: 60px">Finding...</div>
-                    <div style="flex: 1">
-                        <h1>Score: <span id="rg_score">0</span></h1>
-                    </div>
-                </div>
-                <span style="flex: 1"></span>
-                <div style="display: flex; flex-flow: row">
-                    <div style="flex: 3">
-                        <center>
-                        <div id="rg_ava" style="width: 200px; height: 200px">
-                            <img  style="width: 100%; height: 100%; border-radius: 50%" src="https://www.google.com/s2/u/0/photos/public/AIbEiAIAAABDCO6elIz-iqiUXiILdmNhcmRfcGhvdG8qKDNkMDdkZDY3ZmQ1N2IwMGMwMzEyNDg3MjFkNTQxZWIxMmZmNzdkMzMwAc6OmhqhnJOVdQSUaXFTuGNR7eZT?sz=80">
-                        </div>
-                        </center>
-                    </div>
-                    <div style="flex: 1">
-                        <p>Mode</p>
-                        <input type="radio" name="rg_mode" value="stable" onchange='rg_change_mode()'>Stable<br>
-                        <input type="radio" name="rg_mode" value="rotating" onchange='rg_change_mode()' checked=true>Rotating<br>
-                        <input type="radio" name="rg_mode" value="digging" onchange='rg_change_mode()'>Digging<br>
-                        <input type="radio" name="rg_mode" value="dancing" onchange='rg_change_mode()'>Dancing<br>
-                    </div>
-                </div>
-                <span style="flex: 1"></span>
+<div id="rg_popup_2" class="rg_popup_2">
+    <div style="height: 100%; display:flex; flex-flow: column">
+        <div style="padding-top: 20px; display: flex; flex-flow: row">
+            <div id="rg_finding" style="flex: 1; font-size: 60px">Finding...</div>
+            <div style="flex: 1">
+                <h1>Score: <span id="rg_score">0</span></h1>
             </div>
         </div>
-        <script>
-            var rg_rotation = 0, d = document, rg_function = rg_rotation_mode_1;
-            setInterval(function()
-            {
-                rg_ava.style.transform = "rotate(" + rg_function(rg_rotation++) + "deg)";
-                rg_finding.style.visibility = rg_rotation % 10 < 5 ? 'visible' : 'hidden';
-            }, 50);
+        <span style="flex: 1"></span>
+        <div style="display: flex; flex-flow: row">
+            <div style="flex: 3">
+                <center>
+                <div id="rg_ava" style="width: 200px; height: 200px">
+                    <img  style="width: 100%; height: 100%; border-radius: 50%" src="https://www.google.com/s2/u/0/photos/public/AIbEiAIAAABDCO6elIz-iqiUXiILdmNhcmRfcGhvdG8qKDNkMDdkZDY3ZmQ1N2IwMGMwMzEyNDg3MjFkNTQxZWIxMmZmNzdkMzMwAc6OmhqhnJOVdQSUaXFTuGNR7eZT?sz=80">
+                </div>
+                </center>
+            </div>
+            <div style="flex: 1">
+                <p>Mode</p>
+                <input type="radio" name="rg_mode" value="stable" onchange='rg_change_mode()'>Stable<br>
+                <input type="radio" name="rg_mode" value="rotating" onchange='rg_change_mode()' checked=true>Rotating<br>
+                <input type="radio" name="rg_mode" value="digging" onchange='rg_change_mode()'>Digging<br>
+                <input type="radio" name="rg_mode" value="dancing" onchange='rg_change_mode()'>Dancing<br>
+            </div>
+        </div>
+        <span style="flex: 1"></span>
+    </div>
+</div>
+<script>
+    var rg_rotation = 0, d = document, rg_function = rg_rotation_mode_1;
+    setInterval(function()
+    {
+        rg_ava.style.transform = "rotate(" + rg_function(rg_rotation++) + "deg)";
+        rg_finding.style.visibility = rg_rotation % 10 < 5 ? 'visible' : 'hidden';
+    }, 50);
 
-            var rg_hanging_angle, rg_last_mode = 'stable';
-            function rg_rotation_mode_0(t) {return rg_hanging_angle;};
-            function rg_rotation_mode_1(t) {return t * 5;}
-            function rg_rotation_mode_2(t) {return 45 * Math.sin(t * .4);}
-            function rg_rotation_mode_3(t) {return 45 * Math.sin(5 * Math.sin(t / 10));}
+    var rg_hanging_angle, rg_last_mode = 'stable';
+    function rg_rotation_mode_0(t) {return rg_hanging_angle;};
+    function rg_rotation_mode_1(t) {return t * 5;}
+    function rg_rotation_mode_2(t) {return 45 * Math.sin(t * .4);}
+    function rg_rotation_mode_3(t) {return 45 * Math.sin(5 * Math.sin(t / 10));}
 
-            function rg_change_mode()
-            {
-                let radios = d.getElementsByName('rg_mode'), epic = 'stable';
-                for (let i = 0; i < radios.length; ++i)
-                    if (radios[i].checked)
-                        epic = radios[i].value;
-                switch (epic)
-                {
-                    case 'rotating': rg_function = rg_rotation_mode_1; break;
-                    case 'digging': rg_function = rg_rotation_mode_2; break;
-                    case 'dancing': rg_function = rg_rotation_mode_3; break;
-                    default:
-                        rg_hanging_angle = (rg_last_mode=='rotating' ? rg_rotation_mode_1 : rg_last_mode == 'digging' ? rg_rotation_mode_2
-                            : rg_last_mode == 'dancing' ? rg_rotation_mode_3 : rg_rotation_mode_0)(rg_rotation);
-                        rg_function = rg_rotation_mode_0;
-                }
-                rg_last_mode = epic;
-            }
-        </script>
-    </body>
-</html>
+    function rg_change_mode()
+    {
+        let radios = d.getElementsByName('rg_mode'), epic = 'stable';
+        for (let i = 0; i < radios.length; ++i)
+            if (radios[i].checked)
+                epic = radios[i].value;
+        switch (epic)
+        {
+            case 'rotating': rg_function = rg_rotation_mode_1; break;
+            case 'digging': rg_function = rg_rotation_mode_2; break;
+            case 'dancing': rg_function = rg_rotation_mode_3; break;
+            default:
+                rg_hanging_angle = (rg_last_mode=='rotating' ? rg_rotation_mode_1 : rg_last_mode == 'digging' ? rg_rotation_mode_2
+                    : rg_last_mode == 'dancing' ? rg_rotation_mode_3 : rg_rotation_mode_0)(rg_rotation);
+                rg_function = rg_rotation_mode_0;
+        }
+        rg_last_mode = epic;
+    }
+</script>

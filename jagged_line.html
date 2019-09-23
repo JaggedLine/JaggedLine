@@ -3,152 +3,9 @@
 <html>
 	<head>
 		<link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="jagged_line.css">
 		<meta charset="utf-8">
 		<title> Jagged line </title>
-		<style>
-			body 
-			{
-				--d: 20px;
-				--seroburmalinovy: #5d6;
-				overflow-x: hidden;
-				font-family: 'Noto Sans JP', sans-serif;
-				margin: 0;
-				height: 0;
-			}
-			input
-			{
-				width: 80px;
-				text-align: center;
-				font-size: 30px;
-				border-width: 0;
-				background: transparent;
-				border-bottom: 4px double black;
-			}
-			input:focus
-			{
-				outline: 0;
-				/*border-color: blue;*/
-				background: rgba(0, 0, 0, .05);
-			}
-			input#student_name
-			{
-				width: 300px;
-			}
-			.node
-			{
-				position: absolute;
-				background: green;
-				border-radius: 50%;
-				width: var(--d);
-				height: var(--d);
-			}
-			.node:hover
-			{
-				background: blue;
-			}
-			.segment
-			{
-				position: absolute;
-				height: var(--d);
-				background: green;
-				border-radius: calc(var(--d) / 2);
-			}
-			.super_table
-			{
-				border: 1px solid black;
-				width: 80%;
-			}
-			.super_table td
-			{
-				padding-left: 5px;
-				padding-right: 5px;
-				border: 1px solid black;
-			}
-			.rg_button
-			{
-				background: linear-gradient(45deg, red, blue);
-				width: 350px;
-				height: 250px;
-				margin: 70px;
-				font-size: 30px;
-				/*box-shadow: 0px 0px 50px 50px orange;*/
-				border: 20px solid black;
-				border-top-width: 0;
-				border-left-width: 0;
-				border-right-color: grey;
-				/*cursor: no-drop;*/
-				cursor: not-allowed;
-			}
-			.rg_button:active
-			{
-				margin: 90px;
-				border-width: 0;
-				width: 330px;
-				height: 230px;
-				margin-bottom: 70px;
-			}
-			.rg_button:focus
-			{
-				outline: 0;
-			}
-            .lesha_style_for_rg_button
-            {
-                position: absolute;
-                left: 400px;
-                top: 70px;
-                width: 0px;
-                height: 0px;
-                z-index: 228;
-                border: 10px solid #ddd;
-                border-left-color: transparent;
-                border-bottom-color: transparent;
-	        }
-	        .lesha_style_for_rg_button_
-	        {
-	        	position: absolute;
-	        	left: 70px;
-	        	top: 300px;
-	        	width: 0px;
-	        	height: 0px;
-	        	z-index: 228;
-	        	border: 10px solid #ddd;
-	        	border-right-color: transparent;
-	        	border-top-color: transparent;
-	        }
-	        .rg_popup
-	        {
-	        	position: absolute;
-	        	z-index: 240;
-	        	top: 15%;
-	        	left: 20%;
-	        	width: calc(60% - 100px);
-	        	height: calc(70% - 100px);
-	        	border: 50px solid yellow;
-	        	border-radius: 100px;
-	        	text-align: center;
-	        	color: red;
-	        	font-size: 100px;
-	        	visibility: hidden;
-	            -ms-user-select: none;
-	            -moz-user-select: none;
-	            -khtml-user-select: none;
-	            -webkit-user-select: none;
-	        }
-	        .arrow_1
-	        {
-	        	position: absolute;
-	        	z-index: 240;
-	        	left: 80%;
-	        	visibility: hidden;
-	        }
-	        .rg_close
-	        {
-	        	position: absolute;
-	        	font-size: 30px;
-	        	background: transparent;
-	        	z-index: 240;
-	        }
-		</style>
 	</head>
 	<body>
 		<table style="height: 0">
@@ -188,7 +45,6 @@
 						</table>
 					</h2>
 				</div>
-				<script src="jagged_line.js"></script>
 			</td></tr>
 		</table>
 		<div id="rg_background" style="z-index: 230; position: fixed; width: 100%; height: 100%; background:rgba(127, 127, 127, .5); visibility: hidden"></div>
@@ -202,7 +58,37 @@
 		<div id="arrow_1" class="arrow_1">
 			<img src='arrow.png'>
 		</div>
+		<div id="rg_popup_2" class="rg_popup_2">
+			<div style="height: 100%; display:flex; flex-flow: column">
+				<div style="padding-top: 20px; display: flex; flex-flow: row">
+					<div id="rg_finding" style="flex: 1; font-size: 60px">Finding...</div>
+					<div style="flex: 1">
+						<h1>Score: <span id="rg_score">0</span></h1>
+					</div>
+				</div>
+				<span style="flex: 1"></span>
+				<div style="display: flex; flex-flow: row">
+					<div style="flex: 3">
+						<center>
+						<div id="rg_ava" style="width: 200px; height: 200px">
+							<img  style="width: 100%; height: 100%; border-radius: 50%" src="https://www.google.com/s2/u/0/photos/public/AIbEiAIAAABDCO6elIz-iqiUXiILdmNhcmRfcGhvdG8qKDNkMDdkZDY3ZmQ1N2IwMGMwMzEyNDg3MjFkNTQxZWIxMmZmNzdkMzMwAc6OmhqhnJOVdQSUaXFTuGNR7eZT?sz=80">
+						</div>
+						</center>
+					</div>
+					<div style="flex: 1">
+						<p>Mode</p>
+						<input type="radio" name="rg_mode" value="stable" onchange='rg_change_mode()'>Stable<br>
+						<input type="radio" name="rg_mode" value="rotating" onchange='rg_change_mode()' checked=true>Rotating<br>
+						<input type="radio" name="rg_mode" value="digging" onchange='rg_change_mode()'>Digging<br>
+						<input type="radio" name="rg_mode" value="dancing" onchange='rg_change_mode()'>Dancing<br>
+					</div>
+				</div>
+				<span style="flex: 1"></span>
+			</div>
+		</div>
 	</body>
+	<script src="table.js"></script>
+	<script async src="findpath.js"></script>
 	<script>
 		let Tbl = new Table();
 		changeSettings.onclick = function () {
@@ -231,115 +117,6 @@
 			rg_cheburek.style.left = (50 + 13 * Math.tan(t/17)) + '%', rg_cheburek.style.top = (50 + 50 * Math.sin(t/27.34952)) + '%';
 		}, 30);
 
-		rg_button.onclick = function mega_epic()
-		{
-			console.log('MEGA EPIC ACTION STARTED\n');
-			//score.innerHTML = 10 + (score.innerHTML)*1;	
-			function fedroFindMax(n, m, x1, y1, x2, y2, drawFunction)
-			{
-				let dirx = new Array(1, 1, 2, 2, -1, -1, -2, -2);
-				let diry = new Array(2, -2, 1, -1, 2, -2, 1, -1);
-				let pathx = new Array();
-				let pathy = new Array();
-				let anspathx = new Array();
-				let anspathy = new Array();
-				let used = new Array(n);
-				let max_answer = 0;
-
-				function crossProduct(x1, y1, x2, y2)
-				{
-					return x1 * y2 - x2 * y1;
-				}
-
-				function lessPoint(x1, y1, x2, y2)
-				{
-					return x1 < x2 ? [x1, y1] : x1 > x2 ? [x2, y2] : y1 < y2 ? [x1, y1] : [x2, y2];
-				}
-
-				function segmentsIntersect(x1, y1, x2, y2, x3, y3, x4, y4)
-				{
-					let p1 = crossProduct(x2 - x1, y2 - y1, x3 - x1, y3 - y1);
-					let p2 = crossProduct(x2 - x1, y2 - y1, x4 - x1, y4 - y1);
-					let p3 = crossProduct(x4 - x3, y4 - y3, x1 - x3, y1 - y3);
-					let p4 = crossProduct(x4 - x3, y4 - y3, x2 - x3, y2 - y3);
-					if (p1 * p2 == 0 && p3 * p4 == 0) {
-						return false;
-					}
-					if (p1 * p2 <= 0 && p3 * p4 <= 0) {
-						return true;
-					}
-					return false;
-				}
-
-				let global_ops = 0;
-
-				function recursiveGen()
-				{
-					if (++global_ops % 1000 == 0)
-					{
-						//clear_all_kek228();
-						// for (let i = 0; i < pathx.length - 1; ++i)
-						// 	drawFunction(pathx[i], pathy[i], pathx[i+1], pathy[i+1]);
-					}
-					let lastx = pathx[pathx.length - 1];
-					let lasty = pathy[pathy.length - 1];
-					// console.log(lastx, lasty, x2, y2, pathx.length);
-					if (lastx == x2 && lasty == y2 && max_answer < pathx.length - 1) {
-						max_answer = pathx.length - 1;
-						anspathx = pathx.slice(0);
-						anspathy = pathy.slice(0);
-					}
-					if (lastx == x2 && lasty == y2) return;
-					for (let rot = 0; rot < dirx.length; rot++) {
-						let nextx = lastx + dirx[rot];
-						let nexty = lasty + diry[rot];
-						if (nextx < 0 || nextx >= n || nexty < 0 || nexty >= m) {
-							continue;
-						}
-						if (used[nextx][nexty]) {
-							continue;
-						}
-						let f = false;
-						for (let id = 0; id < pathx.length - 1; id++) {
-							if (segmentsIntersect(pathx[id], pathy[id], pathx[id + 1], pathy[id + 1], lastx, lasty, nextx, nexty)) {
-								f = true;
-								break;
-							}
-						}
-						if (f) continue;
-						pathx.push(nextx);
-						pathy.push(nexty);
-						used[nextx][nexty] = true;
-						recursiveGen();
-						used[nextx][nexty] = false;
-						pathx.pop();
-						pathy.pop();
-					}
-				}
-
-				for (let i = 0; i < n; i++) {
-					used[i] = new Array(m);
-					for (let j = 0; j < m; j++) {
-						used[i][j] = false;
-					}
-				}
-				used[x1][y1] = true;
-				pathx.push(x1);
-				pathy.push(y1);
-				anspathx.push(x1);
-				anspathy.push(y1);
-				Tbl.clear_table();
-				recursiveGen(x2, y2);
-				Tbl.clear_table();
-				for (let id = 0; id < anspathx.length - 1; id++) {
-					drawFunction(anspathx[id], anspathy[id], anspathx[id + 1], anspathy[id + 1]);
-				}
-				return max_answer;
-			}
-			let n = Tbl.sizeY, m = Tbl.sizeX, x1 = Tbl.start_point[0], y1 = Tbl.start_point[1], x2 = Tbl.end_point[0], y2 = Tbl.end_point[1];
-			let fedro_answer = fedroFindMax(
-				n*1, m*1, y1*1, x1*1, y2*1, x2*1, (x1, y1, x2, y2) => Tbl.add_segment(y2, x2));
-		}
 		function showPath(gameCnt) {
 			console.log('SHOW')
 			showPathTbl = new Table();
@@ -357,7 +134,38 @@
 		function hidePath(table) {
 			table.clear_table();
 		}
-
-
+	</script>
+	<script>
+		var rg_rotation = 0, d = document, rg_function = rg_rotation_mode_1;
+		setInterval(function()
+		{
+			rg_ava.style.transform = "rotate(" + rg_function(rg_rotation++) + "deg)";
+			rg_finding.style.color = rg_rotation % 10 < 5 ? '#fc0' : 'transparent';
+		}, 50);
+	
+		var rg_hanging_angle, rg_last_mode = 'stable';
+		function rg_rotation_mode_0(t) {return rg_hanging_angle;};
+		function rg_rotation_mode_1(t) {return t * 5;}
+		function rg_rotation_mode_2(t) {return 45 * Math.sin(t * .4);}
+		function rg_rotation_mode_3(t) {return 45 * Math.sin(5 * Math.sin(t / 10));}
+	
+		function rg_change_mode()
+		{
+			let radios = d.getElementsByName('rg_mode'), epic = 'stable';
+			for (let i = 0; i < radios.length; ++i)
+				if (radios[i].checked)
+					epic = radios[i].value;
+			switch (epic)
+			{
+				case 'rotating': rg_function = rg_rotation_mode_1; break;
+				case 'digging': rg_function = rg_rotation_mode_2; break;
+				case 'dancing': rg_function = rg_rotation_mode_3; break;
+				default:
+					rg_hanging_angle = (rg_last_mode=='rotating' ? rg_rotation_mode_1 : rg_last_mode == 'digging' ? rg_rotation_mode_2
+						: rg_last_mode == 'dancing' ? rg_rotation_mode_3 : rg_rotation_mode_0)(rg_rotation);
+					rg_function = rg_rotation_mode_0;
+			}
+			rg_last_mode = epic;
+		}
 	</script>
 </html>
