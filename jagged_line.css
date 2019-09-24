@@ -161,3 +161,8 @@ input#student_name
     background: transparent;
     z-index: 240;
 }
+#rg_exactly_yes, 
+#rg_exactly_no
+{
+    font-size: 30px;
+}
