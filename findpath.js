@@ -1,14 +1,7 @@
 function fedroFindMax(event)
 {
     let n, m, x1, y1, x2, y2;
-    let dirx = new Array(1, 1, 2, 2, -1, -1, -2, -2);
-    let diry = new Array(2, -2, 1, -1, 2, -2, 1, -1);
-    let pathx = new Array();
-    let pathy = new Array();
-    let anspathx = new Array();
-    let anspathy = new Array();
-    let used = new Array();
-    let max_answer = 0;
+    let dirx, diry, pathx, pathy, anspathx, anspathy, used, max_answer;
 
     function crossProduct(x1, y1, x2, y2) {
         return x1 * y2 - x2 * y1;
@@ -86,7 +79,14 @@ function fedroFindMax(event)
         y1 = event.data[3]*1;
         x2 = event.data[4]*1;
         y2 = event.data[5]*1;
+        dirx = new Array(1, 1, 2, 2, -1, -1, -2, -2);
+        diry = new Array(2, -2, 1, -1, 2, -2, 1, -1);
+        pathx = new Array();
+        pathy = new Array();
+        anspathx = new Array();
+        anspathy = new Array();
         used = new Array(n);
+        max_answer = 0;
         for (let i = 0; i < n; i++) {
             used[i] = new Array(m);
             for (let j = 0; j < m; j++) {
@@ -98,6 +98,7 @@ function fedroFindMax(event)
         pathy.push(y1);
         anspathx.push(x1);
         anspathy.push(y1);
+        submitCurrent();
         recursiveGen(x2, y2);
         finish();
     }
