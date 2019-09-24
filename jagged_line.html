@@ -110,7 +110,7 @@
 		}
 		setInterval(function() {rg_button.style.background = 'linear-gradient(' + cw * t++ + 'deg, red, blue)'}, 30);
 		setInterval(function() {rg_popup.style.background = 'linear-gradient(' + 30 * cw * Math.sin(t / 10) + 'deg, #08f, #0f8)'}, 30);
-		rg_button.onclick = function() {cw = -cw; rg_button_pressed();}
+		rg_button.onclick = function() {cw = -cw; mega_epic();}
 		setInterval(rg_disco, 3000000); //30s
 		setInterval(function() {arrow_1.style.top = (45 + 10*Math.sin(10*Math.sin(t/20))) + '%';}, 30);
 		setInterval(function()
@@ -137,26 +137,38 @@
 			table.clear_table();
 		}
 
-		var rg_rotation = 0, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable', is_computed = 'No!';
-		var computing_worker;
-		function mega_epic(Tbl)
-		{
-			//score.innerHTML = 10 + (score.innerHTML)*1;
-			let n = Tbl.sizeY, m = Tbl.sizeX, x1 = Tbl.start_point[0], y1 = Tbl.start_point[1], x2 = Tbl.end_point[0], y2 = Tbl.end_point[1];
-			let fedro_answer = fedroFindMax(
-				n * 1, m * 1, y1 * 1, x1 * 1, y2 * 1, x2 * 1, (x1, y1, x2, y2) => Tbl.add_segment(y2, x2));
-		}
+		let rg_rotation = 0, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable';
+		let result = '';
+		let computing_worker;
 
-		function rg_button_pressed()
+		function mega_epic()
 		{
-			computing_worker = new Worker(URL.createObjectURL(new Blob(["("+mega_epic.toString()+")(Tbl)"], {type: 'text/javascript'})));
+			computing_worker = new Worker(URL.createObjectURL(
+				new Blob(["("+doFindPath.toString()+")()"], {type: 'text/javascript'})));
+			computing_worker.postMessage([Tbl.sizeY, Tbl.sizeX, Tbl.start_point[0], Tbl.start_point[1], Tbl.end_point[0], Tbl.end_point[1]]);
 			computing_worker.onmessage = function(event)
 			{
-				is_computed = event.data;
+				result = event.data;
+				Tbl.clear_table();
+				for (let id = 1; id < result.length; id++) {
+					Tbl.add_segment(result[id][1], result[id][0]);
+				}
 			}
 			rg_popup_2.style.visibility = "visible";
+			let handle = setInterval(function()
+			{
+				rg_ava.style.transform = "rotate(" + rg_function(rg_rotation++) + "deg)";
+				rg_finding.style.color = rg_rotation % 10 < 5 ? '#fc0' : 'transparent';
+				if (result != '') {
+					computing_worker.terminate();
+					rg_popup_2.style.visibility = "hidden";
+					result = '';
+					clearInterval(handle);
+				}
+			}, 50);
 		}
 
+		function rg_rotation_mode_0(t) {return 0;}
 		function rg_rotation_mode_1(t) {return t * 5;}
 		function rg_rotation_mode_2(t) {return 45 * Math.sin(t * .4);}
 		function rg_rotation_mode_3(t) {return 45 * Math.sin(5 * Math.sin(t / 10));}
@@ -173,20 +185,15 @@
 				case 'digging': rg_function = rg_rotation_mode_2; break;
 				case 'dancing': rg_function = rg_rotation_mode_3; break;
 				default:
-					rg_hanging_angle = (rg_last_mode=='rotating' ? rg_rotation_mode_1 : rg_last_mode == 'digging' ? rg_rotation_mode_2
-						: rg_last_mode == 'dancing' ? rg_rotation_mode_3 : rg_rotation_mode_0)(rg_rotation);
+					rg_hanging_angle = (
+						rg_last_mode=='rotating' ? rg_rotation_mode_1 : 
+						rg_last_mode == 'digging' ? rg_rotation_mode_2 : 
+						rg_last_mode == 'dancing' ? rg_rotation_mode_3 : 
+						rg_rotation_mode_0
+					)(rg_rotation);
 					rg_function = rg_rotation_mode_0;
 			}
 			rg_last_mode = epic;
 		}
-
-		setInterval(function()
-		{
-			console.log(3);
-			rg_ava.style.transform = "rotate(" + rg_function(rg_rotation++) + "deg)";
-			rg_finding.style.color = rg_rotation % 10 < 5 ? '#fc0' : 'transparent';
-			if (is_computed != 'No!')
-				alert(is_computed), computing_worker.terminate(), is_computed = 'No!', rg_popup_2.style.visibility = "hidden";
-		}, 50);
 	</script>
 </html>
