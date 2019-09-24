@@ -19,7 +19,7 @@
 			<td>
 				<div style="position:absolute; right: 0%; width: 30%; padding-left: 40px; background: #dddddd">
 					<h2>
-						<div style="position: relative"	>
+						<div id="rg_button_div" style="position: relative; display: none;">
 							<button id="rg_button" class="rg_button"> Роман Валерьевич, не нажимайте на эту кнопочку!!! </button>
 							<div class="lesha_style_for_rg_button"></div>
 							<div class="lesha_style_for_rg_button_"></div>
@@ -48,6 +48,11 @@
 			</td></tr>
 		</table>
 		<div id="rg_background" style="z-index: 230; position: fixed; width: 100%; height: 100%; background:rgba(127, 127, 127, .5); visibility: hidden"></div>
+		<div id="rg_check" class="rg_popup" style="visibility: visible; background: #a4f">
+			Вы <span id="rg_exactly"></span> Роман Валерьевич? <br>
+			<button id="rg_exactly_yes">Да!</button>
+			<button id="rg_exactly_no">Нет!</button>
+		</div>
 		<div id="rg_popup" class="rg_popup">
 			Роман Валерьевич!<br>
 			ТОЛЬКО НЕ НАЖИМАЙТЕ НА КНОПКУ СПРАВА!!!<br>
@@ -102,31 +107,50 @@
 		Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
 
 		var t = 0, cw = 10;
-		function rg_disco()
+		let is_rg = false;
+		rg_exactly_yes.onclick = function() 
 		{
-			if (ever_pressed)
-				return;
-			rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'visible';
+			is_rg = true;
+			rg_exactly.innerHTML += ' точно';
 		}
-		function pause_rg_disco()
+		rg_exactly_no.onclick = function()
 		{
-			rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'hidden';
+			if (is_rg) {
+				rg_button_div.style.display = 'block';
+				rg_check.innerHTML = 'А я так и знал!';
+				setTimeout(function() {rg_check.style.display = 'none';}, 1000);
+				rg_part();
+			} else {
+				rg_check.style.display = 'none';
+			}
 		}
-		setInterval(function() {rg_button.style.background = 'linear-gradient(' + cw * t++ + 'deg, red, blue)'}, 30);
-		setInterval(function() {rg_popup.style.background = 'linear-gradient(' + 30 * cw * Math.sin(t / 10) + 'deg, #08f, #0f8)'}, 30);
-		rg_button.onclick = function()
-		{
-			ever_pressed = true;
-			cw = -cw; mega_epic();
+		function rg_part() {
+			function rg_disco()
+			{
+				if (ever_pressed)
+					return;
+				rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'visible';
+			}
+			function pause_rg_disco()
+			{
+				rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'hidden';
+			}
+			setInterval(function() {rg_button.style.background = 'linear-gradient(' + cw * t++ + 'deg, red, blue)'}, 30);
+			setInterval(function() {rg_popup.style.background = 'linear-gradient(' + 30 * cw * Math.sin(t / 10) + 'deg, #08f, #0f8)'}, 30);
+			rg_button.onclick = function()
+			{
+				ever_pressed = true;
+				cw = -cw; mega_epic();
+			}
+			setInterval(rg_disco, 30000); //30s
+			setInterval(function() {arrow_1.style.top = (45 + 10*Math.sin(10*Math.sin(t/20))) + '%';}, 30);
+			setInterval(function()
+			{
+				rg_lol.style.left = (50 + 10 * Math.tan(t/25)) + '%', rg_lol.style.top = (50 + 25 * Math.sin(t/11.56239)) + '%';
+				rg_kek.style.left = (50 - 20 * Math.tan(t/20)) * Math.sin(t/1000) + '%', rg_kek.style.top = (50 + 35 * Math.sin(t/13.52735)) + '%';
+				rg_cheburek.style.left = (50 + 13 * Math.tan(t/17)) + '%', rg_cheburek.style.top = (50 + 50 * Math.sin(t/27.34952)) + '%';
+			}, 30);
 		}
-		setInterval(rg_disco, 30000); //30s
-		setInterval(function() {arrow_1.style.top = (45 + 10*Math.sin(10*Math.sin(t/20))) + '%';}, 30);
-		setInterval(function()
-		{
-			rg_lol.style.left = (50 + 10 * Math.tan(t/25)) + '%', rg_lol.style.top = (50 + 25 * Math.sin(t/11.56239)) + '%';
-			rg_kek.style.left = (50 - 20 * Math.tan(t/20)) * Math.sin(t/1000) + '%', rg_kek.style.top = (50 + 35 * Math.sin(t/13.52735)) + '%';
-			rg_cheburek.style.left = (50 + 13 * Math.tan(t/17)) + '%', rg_cheburek.style.top = (50 + 50 * Math.sin(t/27.34952)) + '%';
-		}, 30);
 
 		function showPath(gameCnt) {
 			showPathTbl = new Table();
