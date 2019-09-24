@@ -91,7 +91,7 @@
 	<script src="worker.js"></script>
 	<script src="findpath.js"></script>
 	<script>
-		var d = document;
+		var d = document, ever_pressed = false;
 
 		let Tbl = new Table();
 		changeSettings.onclick = function () {
@@ -102,6 +102,8 @@
 		var t = 0, cw = 10;
 		function rg_disco()
 		{
+			if (ever_pressed)
+				return;
 			rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'visible';
 		}
 		function pause_rg_disco()
@@ -110,7 +112,11 @@
 		}
 		setInterval(function() {rg_button.style.background = 'linear-gradient(' + cw * t++ + 'deg, red, blue)'}, 30);
 		setInterval(function() {rg_popup.style.background = 'linear-gradient(' + 30 * cw * Math.sin(t / 10) + 'deg, #08f, #0f8)'}, 30);
-		rg_button.onclick = function() {cw = -cw; mega_epic();}
+		rg_button.onclick = function()
+		{
+			ever_pressed = true;
+			cw = -cw; mega_epic();
+		}
 		setInterval(rg_disco, 30000); //30s
 		setInterval(function() {arrow_1.style.top = (45 + 10*Math.sin(10*Math.sin(t/20))) + '%';}, 30);
 		setInterval(function()
