@@ -56,9 +56,9 @@
 		<div id="rg_popup" class="rg_popup">
 			Роман Валерьевич!<br>
 			ТОЛЬКО НЕ НАЖИМАЙТЕ НА КНОПКУ СПРАВА!!!<br>
-			<button id="rg_lol" class="rg_close" onclick='pause_rg_disco()'>Отвалить</button>
-			<button id="rg_kek" class="rg_close" onclick='pause_rg_disco()'>Отвалить</button>
-			<button id="rg_cheburek" class="rg_close" onclick='pause_rg_disco()'>Отвалить</button>
+			<button id="rg_lol" class="rg_close" onmousedown='pause_rg_disco()'>Отвалить</button>
+			<button id="rg_kek" class="rg_close" onmousedown='pause_rg_disco()'>Отвалить</button>
+			<button id="rg_cheburek" class="rg_close" onmousedown='pause_rg_disco()'>Отвалить</button>
 		</div>
 		<div id="arrow_1" class="arrow_1">
 			<img src='arrow.png'>
@@ -124,17 +124,17 @@
 				rg_check.style.display = 'none';
 			}
 		}
+		function rg_disco()
+		{
+			if (ever_pressed)
+				return;
+			rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'visible';
+		}
+		function pause_rg_disco()
+		{
+			rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'hidden';
+		}
 		function rg_part() {
-			function rg_disco()
-			{
-				if (ever_pressed)
-					return;
-				rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'visible';
-			}
-			function pause_rg_disco()
-			{
-				rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'hidden';
-			}
 			setInterval(function() {rg_button.style.background = 'linear-gradient(' + cw * t++ + 'deg, red, blue)'}, 30);
 			setInterval(function() {rg_popup.style.background = 'linear-gradient(' + 30 * cw * Math.sin(t / 10) + 'deg, #08f, #0f8)'}, 30);
 			rg_button.onclick = function()
