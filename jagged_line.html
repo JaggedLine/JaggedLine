@@ -63,7 +63,7 @@
 				<div style="padding-top: 20px; display: flex; flex-flow: row">
 					<div id="rg_finding" style="flex: 1; font-size: 60px">Finding...</div>
 					<div style="flex: 1">
-						<h1>Score: <span id="rg_score">0</span></h1>
+						<h1>Computer score: <span id="comp_score">0</span></h1>
 					</div>
 				</div>
 				<span style="flex: 1"></span>
@@ -81,6 +81,8 @@
 						<input type="radio" name="rg_mode" value="rotating" onchange='rg_change_mode()' checked=true>Rotating<br>
 						<input type="radio" name="rg_mode" value="digging" onchange='rg_change_mode()'>Digging<br>
 						<input type="radio" name="rg_mode" value="dancing" onchange='rg_change_mode()'>Dancing<br>
+						<br>
+						<button onclick="pauseCalc()" class="rg_close_2">Прервать</button>
 					</div>
 				</div>
 				<span style="flex: 1"></span>
@@ -144,32 +146,41 @@
 		}
 
 		let rg_rotation = 0, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable';
-		let result = '';
-		let computing_worker;
+		let result = [];
+		let computing_worker, handle;
+
+		function pauseCalc()
+		{
+			computing_worker.terminate();
+			rg_popup_2.style.visibility = "hidden";
+			result = [];
+			clearInterval(handle);
+		}
 
 		function mega_epic()
 		{
-			computing_worker = new Worker(URL.createObjectURL(
-				new Blob(["("+doFindPath.toString()+")()"], {type: 'text/javascript'})));
-			computing_worker.postMessage([Tbl.sizeY, Tbl.sizeX, Tbl.start_point[0], Tbl.start_point[1], Tbl.end_point[0], Tbl.end_point[1]]);
+			computing_worker = new Worker(URL.createObjectURL(new Blob(["("+fedroFindMax.toString()+")()"])));
+			computing_worker.postMessage(
+				[Tbl.sizeY, Tbl.sizeX, Tbl.start_point[0], Tbl.start_point[1], Tbl.end_point[0], Tbl.end_point[1]]);
 			computing_worker.onmessage = function(event)
 			{
 				result = event.data;
+				if (event.data == 'finish') {
+					return;
+				}
 				Tbl.clear_table();
 				for (let id = 1; id < result.length; id++) {
 					Tbl.add_segment(result[id][1], result[id][0]);
 				}
+				d.getElementById('comp_score').innerHTML = result.length - 1;
 			}
 			rg_popup_2.style.visibility = "visible";
-			let handle = setInterval(function()
+			handle = setInterval(function()
 			{
 				rg_ava.style.transform = "rotate(" + rg_function(rg_rotation++) + "deg)";
 				rg_finding.style.color = rg_rotation % 10 < 5 ? '#fc0' : 'transparent';
-				if (result != '') {
-					computing_worker.terminate();
-					rg_popup_2.style.visibility = "hidden";
-					result = '';
-					clearInterval(handle);
+				if (result == 'finish') {
+					pauseCalc();
 				}
 			}, 50);
 		}
