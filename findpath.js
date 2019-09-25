@@ -48,7 +48,7 @@ function fedroFindMax(event)
         let lastx = pathx[pathx.length - 1];
         let lasty = pathy[pathy.length - 1];
         global_ops++
-        if (global_ops % 500000 == 0) {
+        if (global_ops % 100000 == 0) {
             submitCurrent();
         }
         // console.log(lastx, lasty, x2, y2, pathx.length);

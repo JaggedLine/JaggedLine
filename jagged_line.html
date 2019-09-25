@@ -188,7 +188,7 @@
 		{
 			computing_worker = new Worker(URL.createObjectURL(new Blob(["("+fedroFindMax.toString()+")()"])));
 			computing_worker.postMessage(
-				[Tbl.sizeY, Tbl.sizeX, Tbl.start_point[0], Tbl.start_point[1], Tbl.end_point[0], Tbl.end_point[1]]);
+				[Tbl.sizeY, Tbl.sizeX, Tbl.start_point[1], Tbl.start_point[0], Tbl.end_point[1], Tbl.end_point[0]]);
 			computing_worker.onmessage = function(event)
 			{
 				result = event.data;
