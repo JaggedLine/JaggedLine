@@ -48,9 +48,9 @@ class Table {
 
 		this.id = opt.id == undefined ? 'main' : opt.id;
 		this.sz = opt.sz || 100;
-		this.segment_height = opt.segment_height || 10;
+		this.segment_height = opt.segment_height || 20;
 		this.segment_color = opt.segment_color || 'skyblue';
-		this.node_radius = opt.node_radius || 20;
+		this.node_radius = opt.node_radius || 30;
 		this.node_color = opt.node_color || 'green';
 		this.used_node_color = opt.used_node_color || this.segment_color
 		this.start_node_color = opt.start_node_color || 'red';
@@ -381,8 +381,24 @@ function f_click_1(j, i, table)
 
 	if (i == table.end_point[1] && j == table.end_point[0]) {
 		setTimeout(function() {
-			alert(student_name.value + ', your score is ' + table.lines_cnt())
-			scores.innerHTML += '<tr><td id="game_'+table.games_cnt+'" style="text-align: center;">' + table.games_cnt + '</td><td>' + student_name.value + '</td><td style="text-align: center;">' + table.lines_cnt() + '<button style="float:right;" id = "show_path_' + table.games_cnt++ + '"><img src="eye.png" style="width: 30px; height: 30px"></button></td></tr>';
+			alert(student_name.value + ', your score is ' + table.lines_cnt());
+
+			let tr = addElement(scores, 'tr');
+			addElement(tr, 'td', {'text-align': 'center'}, {id: `game_${table.games_cnt}`}).innerHTML = table.games_cnt;
+			addElement(tr, 'td', {}, {}).innerHTML = student_name.value;
+			let td = addElement(tr, 'td', {'text-align': 'center'}, {});
+			td.innerHTML = table.lines_cnt();
+			addElement(td, 'button',
+				{
+					float: 'right',
+					'background': 'white url(eye.png)',
+					'background-size': '100%',
+					width: '30px',
+					height: '30px'
+				}, {
+					id: `show_path_${table.games_cnt++}`
+				});
+			
 			d.getElementById('game_'+(table.games_cnt-1)).setAttribute('jagged_line', JSON.stringify({x: table.sizeX, y: table.sizeY, points: table.points}));
 			for (let i = 0; i < table.games_cnt; i++) {
 				d.getElementById('show_path_'+i).addEventListener('mousedown', function() {xxx = showPath(i); yyy = true;})
