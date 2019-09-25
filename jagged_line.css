@@ -29,21 +29,16 @@ input#student_name
 .node
 {
     position: absolute;
-    background: green;
     border-radius: 50%;
-    width: var(--d);
-    height: var(--d);
 }
 .node:hover
 {
-    background: blue;
+    background: blue!important;
 }
 .segment
 {
     position: absolute;
-    height: var(--d);
     background: green;
-    border-radius: calc(var(--d) / 2);
 }
 .super_table
 {
