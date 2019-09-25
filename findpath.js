@@ -7,7 +7,7 @@ function fedroFindMax(event)
         return x1 * y2 - x2 * y1;
     }
 
-    function submitCurrent() {
+    function submitCurrentMax() {
         let ans = [];
         for (let id = 0; id < anspathx.length; id++) {
             ans.push([anspathx[id], anspathy[id]]);
@@ -15,7 +15,16 @@ function fedroFindMax(event)
         postMessage(ans);
     }
 
+    function submitCurrent() {
+        let ans = [];
+        for (let id = 0; id < pathx.length; id++) {
+            ans.push([pathx[id], pathy[id]]);
+        }
+        postMessage(ans);
+    }
+
     function finish() {
+        submitCurrentMax();
         postMessage('finish');
     }
 
@@ -38,12 +47,16 @@ function fedroFindMax(event)
     function recursiveGen() {
         let lastx = pathx[pathx.length - 1];
         let lasty = pathy[pathy.length - 1];
+        global_ops++
+        if (global_ops % 500000 == 0) {
+            submitCurrent();
+        }
         // console.log(lastx, lasty, x2, y2, pathx.length);
         if (lastx == x2 && lasty == y2 && max_answer < pathx.length - 1) {
             max_answer = pathx.length - 1;
             anspathx = pathx.slice(0);
             anspathy = pathy.slice(0);
-            submitCurrent();
+            submitCurrentMax();
         }
         if (lastx == x2 && lasty == y2) return;
         for (let rot = 0; rot < dirx.length; rot++) {
@@ -98,7 +111,7 @@ function fedroFindMax(event)
         pathy.push(y1);
         anspathx.push(x1);
         anspathy.push(y1);
-        submitCurrent();
+        submitCurrentMax();
         recursiveGen(x2, y2);
         finish();
     }
