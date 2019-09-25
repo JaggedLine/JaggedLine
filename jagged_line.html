@@ -95,7 +95,6 @@
 		</div>
 	</body>
 	<script src="table.js"></script>
-	<script src="worker.js"></script>
 	<script src="findpath.js"></script>
 	<script>
 		var d = document, ever_pressed = false;
@@ -153,20 +152,24 @@
 		}
 
 		function showPath(gameCnt) {
-			showPathTbl = new Table();
-			showPathTbl.id = gameCnt;
-			showPathTbl.show_score = false;
-			showPathTbl.segments_color = 'yellow';
-			points = JSON.parse(d.getElementById('game_'+gameCnt).getAttribute('jagged_line'));
-			showPathTbl.start_point = points[0];
-			showPathTbl.points = [points[0]];
+			showPathTbl = new Table({
+				id: gameCnt,
+				show_score: false,
+				segment_color: 'yellow',
+				node_color: 'transparent',
+				start_node_color: 'transparent',
+				end_node_color: 'transparent'
+			});
+			save = JSON.parse(d.getElementById('game_'+gameCnt).getAttribute('jagged_line'));
+			showPathTbl.generate_table(save.x, save.y)
+			points = save.points
 			for (let n = 1; n < points.length; n++) {
 				showPathTbl.add_segment(points[n][0], points[n][1]);
 			}
 			return showPathTbl;
 		}
 		function hidePath(table) {
-			table.clear_table();
+			table.delete_table();
 		}
 
 		let rg_rotation = 0, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable';
@@ -191,12 +194,15 @@
 				result = event.data;
 				if (event.data == 'finish') {
 					return;
+
 				}
 				Tbl.clear_table();
 				for (let id = 1; id < result.length; id++) {
 					Tbl.add_segment(result[id][1], result[id][0]);
 				}
-				d.getElementById('comp_score').innerHTML = result.length - 1;
+				if (d.getElementById('comp_score').innerHTML*1 < result.length - 1) {
+					d.getElementById('comp_score').innerHTML = result.length - 1;
+				}
 			}
 			rg_popup_2.style.visibility = "visible";
 			handle = setInterval(function()
