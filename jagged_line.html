@@ -173,12 +173,20 @@
 		}
 
 		let rg_rotation = 0, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable';
-		let result = [];
+		let result = [], maxresult = [];
 		let computing_worker, handle;
+
+		function drawResult(yourResult) {
+			Tbl.clear_table();
+			for (let id = 1; id < yourResult.length; id++) {
+				Tbl.add_segment(yourResult[id][1], yourResult[id][0]);
+			}
+		}
 
 		function pauseCalc()
 		{
 			computing_worker.terminate();
+			drawResult(maxresult);
 			d.getElementById('comp_score').innerHTML = 0;
 			rg_popup_2.style.visibility = "hidden";
 			clearInterval(handle);
@@ -187,6 +195,7 @@
 		function mega_epic()
 		{
 			result = [];
+			maxresult = [];
 			computing_worker = new Worker(URL.createObjectURL(new Blob(["("+fedroFindMax.toString()+")()"])));
 			computing_worker.postMessage(
 				[Tbl.sizeY, Tbl.sizeX, Tbl.start_point[1], Tbl.start_point[0], Tbl.end_point[1], Tbl.end_point[0]]);
@@ -195,14 +204,11 @@
 				result = event.data;
 				if (event.data == 'finish') {
 					return;
-
 				}
-				Tbl.clear_table();
-				for (let id = 1; id < result.length; id++) {
-					Tbl.add_segment(result[id][1], result[id][0]);
-				}
+				drawResult(result);
 				if (d.getElementById('comp_score').innerHTML*1 < result.length - 1) {
 					d.getElementById('comp_score').innerHTML = result.length - 1;
+					maxresult = result.slice(0);
 				}
 			}
 			rg_popup_2.style.visibility = "visible";

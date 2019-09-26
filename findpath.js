@@ -1,7 +1,7 @@
 function fedroFindMax(event)
 {
     let n, m, x1, y1, x2, y2;
-    let dirx, diry, pathx, pathy, anspathx, anspathy, used, max_answer;
+    let dirx, diry, pathx, pathy, anspathx, anspathy, used, used1, max_answer;
 
     function crossProduct(x1, y1, x2, y2) {
         return x1 * y2 - x2 * y1;
@@ -42,15 +42,52 @@ function fedroFindMax(event)
         return false;
     }
 
+    function checkIntersection(lastx, lasty, nextx, nexty) {
+        for (let id = 0; id < pathx.length - 1; id++) {
+            if (segmentsIntersect(pathx[id], pathy[id], pathx[id + 1], pathy[id + 1], 
+                lastx, lasty, nextx, nexty)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function isOk(curx, cury) {
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < m; j++) {
+                used1[i][j] = false;
+            }
+        }
+        let q = new Array();
+        q.push([curx, cury]);
+        used1[curx][cury] = true;
+        for (let id = 0; id < q.length; id++) {
+            let lastx = q[id][0], lasty = q[id][1];
+            for (let d = 0; d < 8; d++) {
+                let nextx = lastx + dirx[d], nexty = lasty + diry[d];
+                if (nextx < 0 || nextx >= n || nexty < 0 || nexty >= m) continue;
+                if (used1[nextx][nexty]) continue;
+                if (used[nextx][nexty]) continue;
+                if (!checkIntersection(lastx, lasty, nextx, nexty)) continue;
+                q.push([nextx, nexty]);
+                used1[nextx][nexty] = true;
+                if (used1[x2][y2]) break;
+            }
+        }
+        return used1[x2][y2];
+    }
+
     let global_ops = 0;
+    let depth = 0;
 
     function recursiveGen() {
         let lastx = pathx[pathx.length - 1];
         let lasty = pathy[pathy.length - 1];
-        global_ops++
-        if (global_ops % 100000 == 0) {
-            submitCurrent();
-        }
+        if (depth < 10 && !isOk(lastx, lasty)) return;
+        global_ops++;
+        // if (global_ops % 500000 == 0) {
+        //     submitCurrent();
+        // }
         // console.log(lastx, lasty, x2, y2, pathx.length);
         if (lastx == x2 && lasty == y2 && max_answer < pathx.length - 1) {
             max_answer = pathx.length - 1;
@@ -58,28 +95,22 @@ function fedroFindMax(event)
             anspathy = pathy.slice(0);
             submitCurrentMax();
         }
-        if (lastx == x2 && lasty == y2) return;
+        if (lastx == x2 && lasty == y2 && global_ops % 5000 == 0) {
+            submitCurrent();
+            return;
+        }
         for (let rot = 0; rot < dirx.length; rot++) {
             let nextx = lastx + dirx[rot];
             let nexty = lasty + diry[rot];
-            if (nextx < 0 || nextx >= n || nexty < 0 || nexty >= m) {
-                continue;
-            }
-            if (used[nextx][nexty]) {
-                continue;
-            }
-            let f = false;
-            for (let id = 0; id < pathx.length - 1; id++) {
-                if (segmentsIntersect(pathx[id], pathy[id], pathx[id + 1], pathy[id + 1], lastx, lasty, nextx, nexty)) {
-                    f = true;
-                    break;
-                }
-            }
-            if (f) continue;
+            if (nextx < 0 || nextx >= n || nexty < 0 || nexty >= m) continue;
+            if (used[nextx][nexty]) continue;
+            if (!checkIntersection(lastx, lasty, nextx, nexty)) continue;
             pathx.push(nextx);
             pathy.push(nexty);
             used[nextx][nexty] = true;
+            depth++;
             recursiveGen();
+            depth--;
             used[nextx][nexty] = false;
             pathx.pop();
             pathy.pop();
@@ -99,11 +130,13 @@ function fedroFindMax(event)
         anspathx = new Array();
         anspathy = new Array();
         used = new Array(n);
+        used1 = new Array(n);
         max_answer = 0;
         for (let i = 0; i < n; i++) {
             used[i] = new Array(m);
+            used1[i] = new Array(m);
             for (let j = 0; j < m; j++) {
-                used[i][j] = false;
+                used[i][j] = used1[i][j] = false;
             }
         }
         used[x1][y1] = true;
