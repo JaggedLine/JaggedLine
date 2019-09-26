@@ -7,6 +7,7 @@ body
     margin: 0;
     height: 0;
 }
+
 input
 {
     width: 80px;
@@ -16,41 +17,49 @@ input
     background: transparent;
     border-bottom: 4px double black;
 }
+
 input:focus
 {
     outline: 0;
     /*border-color: blue;*/
     background: rgba(0, 0, 0, .05);
 }
+
 input#student_name
 {
     width: 300px;
 }
+
 .node
 {
     position: absolute;
     border-radius: 50%;
 }
+
 .node:hover
 {
-    background: blue!important;
+    background: skyblue!important;
 }
+
 .segment
 {
     position: absolute;
     background: green;
 }
+
 .super_table
 {
     border: 1px solid black;
     width: 80%;
 }
+
 .super_table td
 {
     padding-left: 5px;
     padding-right: 5px;
     border: 1px solid black;
 }
+
 .rg_button
 {
     background: linear-gradient(45deg, red, blue);
@@ -66,6 +75,7 @@ input#student_name
     /*cursor: no-drop;*/
     cursor: not-allowed;
 }
+
 .rg_button:active
 {
     margin: 90px;
@@ -74,10 +84,12 @@ input#student_name
     height: 230px;
     margin-bottom: 70px;
 }
+
 .rg_button:focus
 {
     outline: 0;
 }
+
 .lesha_style_for_rg_button
 {
     position: absolute;
@@ -90,6 +102,7 @@ input#student_name
     border-left-color: transparent;
     border-bottom-color: transparent;
 }
+
 .lesha_style_for_rg_button_
 {
     position: absolute;
@@ -102,6 +115,7 @@ input#student_name
     border-right-color: transparent;
     border-top-color: transparent;
 }
+
 .rg_popup
 {
     position: absolute;
@@ -121,6 +135,7 @@ input#student_name
     -khtml-user-select: none;
     -webkit-user-select: none;
 }
+
 .rg_popup_2
 {
     position: absolute;
@@ -136,6 +151,7 @@ input#student_name
     background: grey;
     visibility: hidden;
 }
+
 .arrow_1
 {
     position: absolute;
@@ -143,6 +159,7 @@ input#student_name
     left: 80%;
     visibility: hidden;
 }
+
 .rg_close
 {
     position: absolute;
@@ -150,14 +167,15 @@ input#student_name
     background: transparent;
     z-index: 240;
 }
+
 .rg_close_2
 {
     font-size: 20px;
     background: transparent;
     z-index: 240;
 }
-#rg_exactly_yes, 
-#rg_exactly_no
+
+#rg_exactly_yes, #rg_exactly_no
 {
     font-size: 30px;
 }

@@ -97,7 +97,7 @@
 	<script src="table.js"></script>
 	<script src="findpath.js"></script>
 	<script>
-		var d = document, ever_pressed = false;
+		let d = document, ever_pressed = false;
 
 		let Tbl = new Table();
 		changeSettings.onclick = function () {
@@ -105,7 +105,7 @@
 		}
 		Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
 
-		var t = 0, cw = 10;
+		let t = 0, cw = 10;
 		let is_rg = false;
 		rg_exactly_yes.onclick = function() 
 		{
@@ -179,13 +179,14 @@
 		function pauseCalc()
 		{
 			computing_worker.terminate();
+			d.getElementById('comp_score').innerHTML = 0;
 			rg_popup_2.style.visibility = "hidden";
-			result = [];
 			clearInterval(handle);
 		}
 
 		function mega_epic()
 		{
+			result = [];
 			computing_worker = new Worker(URL.createObjectURL(new Blob(["("+fedroFindMax.toString()+")()"])));
 			computing_worker.postMessage(
 				[Tbl.sizeY, Tbl.sizeX, Tbl.start_point[1], Tbl.start_point[0], Tbl.end_point[1], Tbl.end_point[0]]);

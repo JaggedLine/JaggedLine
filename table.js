@@ -47,10 +47,10 @@ class Table {
 		this.games_cnt = 0;
 
 		this.id = opt.id == undefined ? 'main' : opt.id;
-		this.sz = opt.sz || 100;
-		this.segment_height = opt.segment_height || 20;
+		this.sz = opt.sz || 60;
+		this.segment_height = opt.segment_height || 15;
 		this.segment_color = opt.segment_color || 'skyblue';
-		this.node_radius = opt.node_radius || 30;
+		this.node_radius = opt.node_radius || 15;
 		this.node_color = opt.node_color || 'green';
 		this.used_node_color = opt.used_node_color || this.segment_color
 		this.start_node_color = opt.start_node_color || 'red';
@@ -82,7 +82,7 @@ class Table {
 			linear_animation: function (x1, y1, x2, y2) 
 				{
 					table.busy = true;
-					var ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+					let ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
 					let segment = addElement(segments, 'div', 
 						{
 							background: table.segment_color,
@@ -100,8 +100,8 @@ class Table {
 							return;
 						}
 						setTimeout(() => timer(t + 0.05), 10);
-						var xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
-						var len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * t;
+						let xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
+						let len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * t;
 						segment.style.width = len + 'px';
 						segment.style.top = yc + table.node_radius - table.segment_height / 2 + 'px';
 						segment.style.left = (xc - len / 2 + table.node_radius) + 'px';
@@ -111,7 +111,7 @@ class Table {
 			lesha_animation: function (x1, y1, x2, y2) 
 				{
 					table.busy = true;
-					var ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+					let ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
 					let segment = addElement(segments, 'div', 
 						{
 							background: table.segment_color,
@@ -128,9 +128,9 @@ class Table {
 							return;
 						}
 						setTimeout(() => timer(t + 0.05), 10);
-						var xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
-						var len1 = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * 1;
-						var len2 = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * t;
+						let xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
+						let len1 = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * 1;
+						let len2 = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * t;
 						segment.style.width = len2 + 'px';
 						segment.style.top = yc + table.node_radius - table.segment_height / 2 + 'px';
 						segment.style.left = (xc - len1 / 2 + table.node_radius) + 'px';
@@ -169,8 +169,8 @@ class Table {
 							return;
 						}
 						setTimeout(() => timer(t - 0.05 * (1 + Math.min(N - t, past + t))), 10);
-						var xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
-						var len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * t;
+						let xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
+						let len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * t;
 						segment.style.width = len + 'px';
 						segment.style.top = yc + table.node_radius - table.segment_height / 2 + 'px';
 						segment.style.left = (xc - len / 2 + table.node_radius) + 'px';
@@ -198,8 +198,8 @@ class Table {
 							return;
 						}
 						setTimeout(() => timer(t - 0.05 * (1 + Math.min(N - t, past + t))), 10);
-						var xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
-						var len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.width) * t;
+						let xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
+						let len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.width) * t;
 						segment.style.top = yc + table.node_radius - table.segment_height / 2 + 'px';
 						segment.style.width = len + 'px';
 					} 
