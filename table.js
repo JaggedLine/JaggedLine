@@ -251,7 +251,7 @@ class Table {
 		}
 		if(this.covered_node) {
 			let n = this.find_node(this.covered_node[0], this.covered_node[1]);
-			if (n != this.points.length - 1) {
+			if (n != this.points.length - 1 && !this.busy) {
 				let x = this.covered_node[0], y = this.covered_node[1];
 				if (n == -1) {
 					this.node(y, x).style.background = this.hover_node_color;
