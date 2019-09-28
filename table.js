@@ -48,13 +48,22 @@ class Table {
 
 		this.id = opt.id == undefined ? 'main' : opt.id;
 		this.sz = opt.sz || 60;
+
 		this.segment_height = opt.segment_height || 15;
 		this.segment_color = opt.segment_color || 'skyblue';
+
 		this.node_radius = opt.node_radius || 15;
 		this.node_color = opt.node_color || 'green';
-		this.used_node_color = opt.used_node_color || this.segment_color
+		this.used_node_color = opt.used_node_color || this.node_color;
 		this.start_node_color = opt.start_node_color || 'red';
 		this.end_node_color = opt.end_node_color || 'black';
+
+		this.covered_node = 0;
+		this.hover_node_color = 'blue';
+		this.delete_node_color = opt.delete_node_color || this.node_color;
+		this.first_delete_node_color = opt.first_delete_node_color || this.node_color;
+		this.delete_segmnet_color = opt.delete_segmnet_color || this.segment_color;
+
 		this.show_score = opt.show_score == undefined ? true : opt.show_score;
 
 		let table = this;
@@ -229,6 +238,10 @@ class Table {
 		for (let point of this.points) {
 			this.node(point[1], point[0]).style.background = this.used_node_color;
 		}
+		console.log(this.covered_node)
+		if(!this.covered_node == 0) {
+			this.node(this.covered_node[1], this.covered_node[0]).style.background = this.hover_node_color;
+		}
 		if (this.start_point) {this.node(this.start_point[1], this.start_point[0]).style.background = this.start_node_color};
 		if (this.end_point) {this.node(this.end_point[1], this.end_point[0]).style.background = this.end_node_color};
 	}
@@ -307,7 +320,7 @@ class Table {
 		for (let i = 0; i < y; ++i)	{
 			for (let j = 0; j < x; ++j) {
 				let y_pos = i * this.sz, x_pos = j * this.sz;
-				addElement(nodes, 'div', 
+				let node = addElement(nodes, 'div', 
 					{
 						top: `${y_pos}px`, 
 						left: `${x_pos}px`,
@@ -317,7 +330,10 @@ class Table {
 					}, {
 						id: `node_${this.id}_${i}_${j}`, 
 						class: 'node'
-					})
+					});
+				let table = this
+				node.onmouseover = function() {table.covered_node = [j, i]; table.update_nodes_color()};
+				node.onmouseout = function() {table.covered_node = 0; table.update_nodes_color()};
 				// nodes.innerHTML += '<div id="node_' + i + '_' + j + '" class="node" style="top: ' + y_pos + 'px; left: ' + x_pos + 'px"></div>';
 			}
 		}
