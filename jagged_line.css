@@ -36,11 +36,6 @@ input#student_name
     border-radius: 50%;
 }
 
-.node:hover
-{
-    background: skyblue!important;
-}
-
 .segment
 {
     position: absolute;
