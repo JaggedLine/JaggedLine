@@ -102,7 +102,9 @@
 		let Tbl = new Table({
 			used_node_color: 'skyblue',
 			delete_node_color: 'rgb(200, 240, 250)',
-			delete_segment_color: 'rgb(200, 240, 250)'
+			delete_segment_color: 'rgb(200, 240, 250)',
+			first_delete_node_color: 'rgb(200, 240, 250) url(cross.png)'
+
 		});
 		changeSettings.onclick = function () {
 			Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
