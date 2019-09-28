@@ -99,7 +99,11 @@
 	<script>
 		let d = document, ever_pressed = false;
 
-		let Tbl = new Table();
+		let Tbl = new Table({
+			used_node_color: 'skyblue',
+			delete_node_color: 'rgb(200, 240, 250)',
+			delete_segment_color: 'rgb(200, 240, 250)'
+		});
 		changeSettings.onclick = function () {
 			Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
 		}
@@ -185,7 +189,10 @@
 
 		function pauseCalc()
 		{
+			Tbl.not_busy();
+			rg_button.classList.remove("mega_epic_started");
 			computing_worker.terminate();
+			rg_button.removeAttribute('disabled');
 			drawResult(maxresult);
 			d.getElementById('comp_score').innerHTML = 0;
 			rg_popup_2.style.visibility = "hidden";
@@ -196,6 +203,9 @@
 		{
 			result = [];
 			maxresult = [];
+			Tbl.make_busy();
+			rg_button.classList.add('mega_epic_started');
+			rg_button.setAttribute('disabled', 'disabled');
 			computing_worker = new Worker(URL.createObjectURL(new Blob(["("+fedroFindMax.toString()+")()"])));
 			computing_worker.postMessage(
 				[Tbl.sizeY, Tbl.sizeX, Tbl.start_point[1], Tbl.start_point[0], Tbl.end_point[1], Tbl.end_point[0]]);
