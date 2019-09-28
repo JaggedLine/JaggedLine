@@ -46,7 +46,7 @@ class Table {
 		this.points = new Array();
 		this.games_cnt = 0;
 
-		this.id = opt.id == undefined ? 'main' : opt.id;
+		this.id = opt.id === undefined ? 'main' : opt.id;
 		this.sz = opt.sz || 60;
 
 		this.segment_height = opt.segment_height || 15;
@@ -59,12 +59,12 @@ class Table {
 		this.end_node_color = opt.end_node_color || 'black';
 
 		this.covered_node = 0;
-		this.hover_node_color = 'blue';
+		this.hover_node_color = 'grey';
 		this.delete_node_color = opt.delete_node_color || this.node_color;
-		this.first_delete_node_color = opt.first_delete_node_color || this.node_color;
-		this.delete_segmnet_color = opt.delete_segmnet_color || this.segment_color;
+		this.first_delete_node_color = opt.first_delete_node_color || this.delete_node_color;
+		this.delete_segment_color = opt.delete_segment_color || this.segment_color;
 
-		this.show_score = opt.show_score == undefined ? true : opt.show_score;
+		this.show_score = opt.show_score === undefined ? true : opt.show_score;
 
 		let table = this;
 		this.draw_segment_animations = {
@@ -153,7 +153,7 @@ class Table {
 				{
 					segments.removeChild(table.segment(table.lines_cnt() - 1));
 					table.update_score();
-					table.update_nodes_color();
+					table.update_screen();
 					if (N > 1) {table.destroy_segment_animation.no_animation(N - 1);}
 				},
 			linear_animation: function (N, past = 0) 
@@ -169,7 +169,7 @@ class Table {
 							let xy = table.points.pop();
 							table.node(xy[1], xy[0]).style.background = table.node_color;
 							table.update_score();
-							table.update_nodes_color();
+							table.update_screen();
 							if (N > 1) {
 								table.destroy_segment_animation.linear_animation(N - 1, past + 1);
 							} else {
@@ -198,7 +198,7 @@ class Table {
 							segments.removeChild(table.segment(table.lines_cnt() - 1));
 							table.points.pop();
 							table.update_score();
-							this.update_nodes_color();
+							this.update_screen();
 							if (N > 1) {
 								table.destroy_segment_animation.lesha_animation(N - 1, past + 1);
 							} else {
@@ -218,6 +218,14 @@ class Table {
 			};
 		}
 
+	make_busy() {
+		this.busy = true;
+	}
+
+	not_busy() {
+		this.busy = false;
+	}
+
 	segment(n) 
 	{
 		return d.getElementById('segment_'+this.id+'_'+n);
@@ -228,7 +236,7 @@ class Table {
 		return d.getElementById('node_'+this.id+'_'+x+'_'+y);
 	}
 
-	update_nodes_color()
+	update_screen()
 	{
 		for (let x = 0; x < this.sizeX; ++x) {
 			for (let y = 0; y < this.sizeY; ++y) {
@@ -238,9 +246,22 @@ class Table {
 		for (let point of this.points) {
 			this.node(point[1], point[0]).style.background = this.used_node_color;
 		}
-		console.log(this.covered_node)
-		if(!this.covered_node == 0) {
-			this.node(this.covered_node[1], this.covered_node[0]).style.background = this.hover_node_color;
+		for (let n = 0; n < this.lines_cnt(); n++) {
+			this.segment(n).style.background = this.segment_color;
+		}
+		if(this.covered_node) {
+			let n = this.find_node(this.covered_node[0], this.covered_node[1]);
+			let x = this.covered_node[0], y = this.covered_node[1];
+			if (n == -1) {
+				this.node(y, x).style.background = this.hover_node_color;
+			} else {
+				n++;
+				this.node(y, x).style.background = this.first_delete_node_color;
+				for (;n < this.points.length; n++) {
+					this.node(this.points[n][1], this.points[n][0]).style.background = this.delete_node_color;
+					this.segment(n-1).style.background = this.delete_segment_color;
+				}
+			}
 		}
 		if (this.start_point) {this.node(this.start_point[1], this.start_point[0]).style.background = this.start_node_color};
 		if (this.end_point) {this.node(this.end_point[1], this.end_point[0]).style.background = this.end_node_color};
@@ -258,6 +279,17 @@ class Table {
 		}
 	}
 
+	find_node(x, y)
+	{
+		for (let i = 0; i < this.points.length; i++) {
+			let node = this.points[i];
+			if (node[0] == x && node[1] == y) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	clear_table() 
 	{
 		let for_delete = [];
@@ -271,7 +303,7 @@ class Table {
 		}
 		this.points = [this.start_point];
 		this.update_score();
-		this.update_nodes_color();
+		this.update_screen();
 	}
 
 	delete_table()
@@ -332,8 +364,8 @@ class Table {
 						class: 'node'
 					});
 				let table = this
-				node.onmouseover = function() {table.covered_node = [j, i]; table.update_nodes_color()};
-				node.onmouseout = function() {table.covered_node = 0; table.update_nodes_color()};
+				node.onmouseover = function() {table.covered_node = [j, i]; table.update_screen()};
+				node.onmouseout = function() {table.covered_node = 0; table.update_screen()};
 				// nodes.innerHTML += '<div id="node_' + i + '_' + j + '" class="node" style="top: ' + y_pos + 'px; left: ' + x_pos + 'px"></div>';
 			}
 		}
@@ -353,7 +385,7 @@ class Table {
 		let last_y = this.points[this.lines_cnt()][1];	
 		animation_mode(last_x * this.sz, last_y * this.sz, x * this.sz, y * this.sz);
 		this.points.push([x, y]);
-		this.update_nodes_color();
+		this.update_screen();
 		this.update_score();
 
 	}
@@ -367,7 +399,7 @@ class Table {
 			}
 		}
 		this.update_score();
-		this.update_nodes_color();
+		this.update_screen();
 		return false;
 	}
 
