@@ -71,7 +71,8 @@ input#student_name
     cursor: not-allowed;
 }
 
-.rg_button:active
+.rg_button:active,
+.rg_button.mega_epic_started
 {
     margin: 90px;
     border-width: 0;
