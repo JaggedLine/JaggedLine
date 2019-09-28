@@ -251,7 +251,7 @@ class Table {
 		}
 		if(this.covered_node) {
 			let n = this.find_node(this.covered_node[0], this.covered_node[1]);
-			if (n != this.points.length - 1 && !this.busy) {
+			if (n != this.points.length - 1) {
 				let x = this.covered_node[0], y = this.covered_node[1];
 				if (n == -1) {
 					this.node(y, x).style.background = this.hover_node_color;
@@ -366,7 +366,13 @@ class Table {
 						class: 'node'
 					});
 				let table = this
-				node.onmouseover = function() {table.covered_node = [j, i]; table.update_screen()};
+				node.onmouseover = function() {
+					if (!table.busy) {
+						console.log('busy:', table.busy)
+						table.covered_node = [j, i]; 
+						table.update_screen();
+					}
+				};
 				node.onmouseout = function() {table.covered_node = 0; table.update_screen()};
 				// nodes.innerHTML += '<div id="node_' + i + '_' + j + '" class="node" style="top: ' + y_pos + 'px; left: ' + x_pos + 'px"></div>';
 			}
