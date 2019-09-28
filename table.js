@@ -108,7 +108,7 @@ class Table {
 							table.busy = false;
 							return;
 						}
-						setTimeout(() => timer(t + 0.05), 10);
+						setTimeout(() => timer(t + 0.1), 20);
 						let xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
 						let len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * t;
 						segment.style.width = len + 'px';
@@ -177,7 +177,7 @@ class Table {
 							}
 							return;
 						}
-						setTimeout(() => timer(t - 0.05 * (1 + Math.min(N - t, past + t))), 10);
+						setTimeout(() => timer(t - 0.1 * (1 + Math.min(N - t, past + t))), 20);
 						let xc = x1 * (1 - t) + ((x1 + x2) / 2) * t, yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
 						let len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + table.segment_height) * t;
 						segment.style.width = len + 'px';
@@ -251,15 +251,17 @@ class Table {
 		}
 		if(this.covered_node) {
 			let n = this.find_node(this.covered_node[0], this.covered_node[1]);
-			let x = this.covered_node[0], y = this.covered_node[1];
-			if (n == -1) {
-				this.node(y, x).style.background = this.hover_node_color;
-			} else {
-				n++;
-				this.node(y, x).style.background = this.first_delete_node_color;
-				for (;n < this.points.length; n++) {
-					this.node(this.points[n][1], this.points[n][0]).style.background = this.delete_node_color;
-					this.segment(n-1).style.background = this.delete_segment_color;
+			if (n != this.points.length - 1) {
+				let x = this.covered_node[0], y = this.covered_node[1];
+				if (n == -1) {
+					this.node(y, x).style.background = this.hover_node_color;
+				} else {
+					n++;
+					this.node(y, x).style.background = this.first_delete_node_color;
+					for (;n < this.points.length; n++) {
+						this.node(this.points[n][1], this.points[n][0]).style.background = this.delete_node_color;
+						this.segment(n-1).style.background = this.delete_segment_color;
+					}
 				}
 			}
 		}
