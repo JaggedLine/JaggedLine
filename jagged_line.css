@@ -1,4 +1,22 @@
-body 
+html, body {
+    height: 100%;
+}
+
+#field {
+    position: relative;
+    width: 100%;
+    height: 500px;
+}
+
+.field-col {
+    background-image: linear-gradient(60deg, #cff5f5, #e9feff);
+}
+
+.settings-col {
+    background-image: linear-gradient(60deg, #f1f5f4, #a5c9c5);
+}
+
+/* body 
 {
     --d: 20px;
     --seroburmalinovy: #5d6;
@@ -6,9 +24,9 @@ body
     font-family: 'Noto Sans JP', sans-serif;
     margin: 0;
     height: 0;
-}
+} */
 
-input
+/* input
 {
     width: 80px;
     text-align: center;
@@ -21,27 +39,25 @@ input
 input:focus
 {
     outline: 0;
-    /*border-color: blue;*/
     background: rgba(0, 0, 0, .05);
-}
+} */
 
-input#student_name
+/* input#student_name
 {
     width: 300px;
-}
+}*/
 
-.node
-{
+.node {
     position: absolute;
     border-radius: 50%;
-    background-size: 100%!important;
+    background-size: 100% !important;
 }
 
-.segment
-{
+.segment {
     position: absolute;
-    background: green;
 }
+
+/*
 
 .super_table
 {
@@ -63,12 +79,10 @@ input#student_name
     height: 250px;
     margin: 70px;
     font-size: 30px;
-    /*box-shadow: 0px 0px 50px 50px orange;*/
     border: 20px solid black;
     border-top-width: 0;
     border-left-width: 0;
     border-right-color: grey;
-    /*cursor: no-drop;*/
     cursor: not-allowed;
 }
 
@@ -175,4 +189,4 @@ input#student_name
 #rg_exactly_yes, #rg_exactly_no
 {
     font-size: 30px;
-}
+} */
