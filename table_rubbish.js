@@ -488,23 +488,3 @@ function f_click_2(j, i, table)
 		}, 300);
 	}
 }
-
-let Tbl = new Table({
-	node_color: 'rgba(0, 96, 57, 0.9)',
-	used_node_color: 'rgba(50, 50, 255, 0.9)',
-	delete_node_color: 'rgba(255, 110, 110, 0.9)',
-	segment_color: 'rgba(64, 64, 255, 0.9)',
-	delete_segment_color: 'rgba(255, 127, 127, 0.9)',
-});
-
-function initTable() {
-	Tbl.generate_table(
-		inputSizeX.value, inputSizeY.value,
-		f_click_1,
-		[inputStartX.value, inputStartY.value],
-		[inputEndX.value, inputEndY.value],
-	);
-}
-
-initTable();
-changeSettings.onclick = initTable;

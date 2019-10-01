@@ -18,7 +18,7 @@
 <body>
 	<div class="container-fluid h-100">
 		<div class="row h-100">
-			<div class="col-lg-8 px-5 py-4 field-col">
+			<div class="col-lg-9 px-5 py-4 field-col">
 				<div class="d-flex flex-wrap">
 					<div class="mr-auto m-4">
 						<h2>Мега-эпик игра</h2>
@@ -33,13 +33,13 @@
 					<div id="nodes"></div>
 				</div>
 			</div>
-			<div class="col-lg-4 p-4 settings-col">
-				<form>
+			<div class="col-lg-3 p-4 settings-col">
+				<form autocomplete="off">
 					<h2 class="text-center m-4">Настройки</h2>
 					<br>
 					<div class="form-group row">
 						<div class="col-lg-6">
-							<h4>Размеры поля:</h4>
+							<h4 class="col-form-label-lg">Размеры поля:</h4>
 						</div>
 						<div class="col-lg-3">
 							<input class="form-control" id="inputSizeY" value="8" placeholder="Y">
@@ -50,7 +50,7 @@
 					</div>
 					<div class="form-group row">
 						<div class="col-lg-6">
-							<h4>Начальный узел:</h4>
+							<h4 class="col-form-label-lg">Начальный узел:</h4>
 						</div>
 						<div class="col-lg-3">
 							<input class="form-control" id="inputStartY" value="0" placeholder="Y">
@@ -61,7 +61,7 @@
 					</div>
 					<div class="form-group row">
 						<div class="col-lg-6">
-							<h4>Конечный узел:</h4>
+							<h4 class="col-form-label-lg">Конечный узел:</h4>
 						</div>
 						<div class="col-lg-3">
 							<input class="form-control" id="inputEndY" value="7" placeholder="Y">
@@ -83,273 +83,10 @@
 			</div>
 		</div>
 	</div>
-	<!-- <table style="height: 0">
-		<tr>
-			<td>
-				<div id="field" style="position: absolute; top: 50px; left: 50px; display: table">
-					<div id="segments"></div>
-					<div id="nodes"></div>
-				</div>
-			</td>
-			<td>
-				<div style="position:absolute; right: 0%; width: 30%; padding-left: 40px; background: #dddddd">
-					<h2>
-						<div id="rg_button_div" style="position: relative; display: none;">
-							<button id="rg_button" class="rg_button"> Роман Валерьевич, не нажимайте на эту кнопочку!!!
-							</button>
-							<div class="lesha_style_for_rg_button"></div>
-							<div class="lesha_style_for_rg_button_"></div>
-						</div>
-						<div style="display: flex; flex-flow: row">
-							<table style="flex: 2.5">
-								<tr>
-									<td>Field size:</td>
-									<td><input id="inputSizeY" value=5></td>
-									<td><input id="inputSizeX" value=7></td>
-								</tr>
-								<tr>
-									<td>Start node:</td>
-									<td><input id="inputStartY" value=0></td>
-									<td><input id="inputStartX" value=0></td>
-								</tr>
-								<tr>
-									<td>End node:</td>
-									<td><input id="inputEndY" value=1></td>
-									<td><input id="inputEndX" value=1></td>
-								</tr>
-							</table>
-							<span style="flex: 0.2"></span>
-							<div style="flex: 1; display: flex; flex-flow: column">
-								<span style="flex: 3"></span>
-								<button id='changeSettings' style="flex: 1.4">Apply</button>
-								<span style="flex: 3"></span>
-							</div>
-							<span style="flex: 0.2"></span>
-						</div><br>
-						Sliver name: <input id="student_name" style="font-size: 30px; padding: 3px; padding-left: 10px"
-							value="Vanyok" spellcheck="false"><br><br>
-						Score: ~<span id="score">0</span><br><br>
-						Results: <table id="scores" class="super_table">
-							<tr>
-								<td style='text-align: center;'>#</td>
-								<td>Sliver</td>
-								<td style='text-align: center;'>Score</td>
-							</tr>
-						</table>
-					</h2>
-				</div>
-			</td>
-		</tr>
-	</table>
-	<div id="rg_background"
-		style="z-index: 230; position: fixed; width: 100%; height: 100%; background:rgba(127, 127, 127, .5); visibility: hidden">
-	</div>
-	<div id="rg_check" class="rg_popup" style="visibility: hidden; background: #a4f">
-		Вы <span id="rg_exactly"></span> Роман Валерьевич? <br>
-		<button id="rg_exactly_yes">Да!</button>
-		<button id="rg_exactly_no">Нет!</button>
-	</div>
-	<div id="rg_popup" class="rg_popup">
-		Роман Валерьевич!<br>
-		ТОЛЬКО НЕ НАЖИМАЙТЕ НА КНОПКУ СПРАВА!!!<br>
-		<button id="rg_lol" class="rg_close" onmousedown='pause_rg_disco()'>Отвалить</button>
-		<button id="rg_kek" class="rg_close" onmousedown='pause_rg_disco()'>Отвалить</button>
-		<button id="rg_cheburek" class="rg_close" onmousedown='pause_rg_disco()'>Отвалить</button>
-	</div>
-	<div id="arrow_1" class="arrow_1">
-		<img src='arrow.png'>
-	</div>
-	<div id="rg_popup_2" class="rg_popup_2">
-		<div style="height: 100%; display:flex; flex-flow: column">
-			<div style="padding-top: 20px; display: flex; flex-flow: row">
-				<div id="rg_finding" style="flex: 1; font-size: 60px">Finding...</div>
-				<div style="flex: 1">
-					<h1>Computer score: <span id="comp_score">0</span></h1>
-				</div>
-			</div>
-			<span style="flex: 1"></span>
-			<div style="display: flex; flex-flow: row">
-				<div style="flex: 3">
-					<center>
-						<div id="rg_ava" style="width: 200px; height: 200px">
-							<img style="width: 100%; height: 100%; border-radius: 50%"
-								src="https://www.google.com/s2/u/0/photos/public/AIbEiAIAAABDCO6elIz-iqiUXiILdmNhcmRfcGhvdG8qKDNkMDdkZDY3ZmQ1N2IwMGMwMzEyNDg3MjFkNTQxZWIxMmZmNzdkMzMwAc6OmhqhnJOVdQSUaXFTuGNR7eZT?sz=80">
-						</div>
-					</center>
-				</div>
-				<div style="flex: 1">
-					<p>Mode</p>
-					<input type="radio" name="rg_mode" value="stable" onchange='rg_change_mode()'>Stable<br>
-					<input type="radio" name="rg_mode" value="rotating" onchange='rg_change_mode()'
-						checked=true>Rotating<br>
-					<input type="radio" name="rg_mode" value="digging" onchange='rg_change_mode()'>Digging<br>
-					<input type="radio" name="rg_mode" value="dancing" onchange='rg_change_mode()'>Dancing<br>
-					<br>
-					<button onclick="pauseCalc()" class="rg_close_2">Прервать</button>
-				</div>
-			</div>
-			<span style="flex: 1"></span>
-		</div>
-	</div> -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="table.js"></script>
 </body>
-<script src="table.js"></script>
-<script src="findpath.js"></script>
-<script>
-	let d = document, ever_pressed = false;
-
-	let Tbl = new Table({
-		node_color: 'rgba(0, 96, 57, 0.9)',
-		used_node_color: 'rgba(50, 50, 255, 0.9)',
-		delete_node_color: 'rgba(255, 110, 110, 0.9)',
-		segment_color: 'rgba(64, 64, 255, 0.9)',
-		delete_segment_color: 'rgba(255, 127, 127, 0.9)',
-	});
-	changeSettings.onclick = function () {
-		Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
-	}
-	Tbl.generate_table(inputSizeX.value, inputSizeY.value, f_click_1, [inputStartX.value, inputStartY.value], [inputEndX.value, inputEndY.value]);
-
-	let t = 0, cw = 10;
-	let is_rg = false;
-	rg_exactly_yes.onclick = function () {
-		is_rg = true;
-		rg_exactly.innerHTML += ' точно';
-	}
-	rg_exactly_no.onclick = function () {
-		if (is_rg) {
-			rg_button_div.style.display = 'block';
-			rg_check.innerHTML = 'А я так и знал!';
-			setTimeout(function () { rg_check.style.display = 'none'; }, 1000);
-			rg_part();
-		} else {
-			rg_check.style.display = 'none';
-		}
-	}
-	function rg_disco() {
-		if (ever_pressed)
-			return;
-		rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'visible';
-	}
-	function pause_rg_disco() {
-		rg_popup.style.visibility = arrow_1.style.visibility = rg_background.style.visibility = 'hidden';
-	}
-	function rg_part() {
-		setInterval(function () { rg_button.style.background = 'linear-gradient(' + cw * t++ + 'deg, red, blue)' }, 30);
-		setInterval(function () { rg_popup.style.background = 'linear-gradient(' + 30 * cw * Math.sin(t / 10) + 'deg, #08f, #0f8)' }, 30);
-		rg_button.onclick = function () {
-			ever_pressed = true;
-			cw = -cw; mega_epic();
-		}
-		setInterval(rg_disco, 30000); //30s
-		setInterval(function () { arrow_1.style.top = (45 + 10 * Math.sin(10 * Math.sin(t / 20))) + '%'; }, 30);
-		setInterval(function () {
-			rg_lol.style.left = (50 + 10 * Math.tan(t / 25)) + '%', rg_lol.style.top = (50 + 25 * Math.sin(t / 11.56239)) + '%';
-			rg_kek.style.left = (50 - 20 * Math.tan(t / 20)) * Math.sin(t / 1000) + '%', rg_kek.style.top = (50 + 35 * Math.sin(t / 13.52735)) + '%';
-			rg_cheburek.style.left = (50 + 13 * Math.tan(t / 17)) + '%', rg_cheburek.style.top = (50 + 50 * Math.sin(t / 27.34952)) + '%';
-		}, 30);
-	}
-
-	function showPath(gameCnt) {
-		showPathTbl = new Table({
-			id: gameCnt,
-			show_score: false,
-			segment_color: 'yellow',
-			node_color: 'transparent',
-			start_node_color: 'transparent',
-			end_node_color: 'transparent'
-		});
-		save = JSON.parse(d.getElementById('game_' + gameCnt).getAttribute('jagged_line'));
-		showPathTbl.generate_table(save.x, save.y)
-		points = save.points
-		for (let n = 1; n < points.length; n++) {
-			showPathTbl.add_segment(points[n][0], points[n][1]);
-		}
-		return showPathTbl;
-	}
-	function hidePath(table) {
-		table.delete_table();
-	}
-
-	let rg_rotation = 0, rg_function = rg_rotation_mode_1, rg_hanging_angle, rg_last_mode = 'stable';
-	let result = [], maxresult = [];
-	let computing_worker, handle;
-
-	function drawResult(yourResult) {
-		Tbl.clear_table();
-		for (let id = 1; id < yourResult.length; id++) {
-			Tbl.add_segment(yourResult[id][1], yourResult[id][0]);
-		}
-	}
-
-	function pauseCalc() {
-		Tbl.not_busy();
-		rg_button.classList.remove("mega_epic_started");
-		computing_worker.terminate();
-		rg_button.removeAttribute('disabled');
-		drawResult(maxresult);
-		d.getElementById('comp_score').innerHTML = 0;
-		rg_popup_2.style.visibility = "hidden";
-		clearInterval(handle);
-	}
-
-	function mega_epic() {
-		result = [];
-		maxresult = [];
-		Tbl.make_busy();
-		rg_button.classList.add('mega_epic_started');
-		rg_button.setAttribute('disabled', 'disabled');
-		computing_worker = new Worker(URL.createObjectURL(new Blob(["(" + fedroFindMax.toString() + ")()"])));
-		computing_worker.postMessage(
-			[Tbl.sizeY, Tbl.sizeX, Tbl.start_point[1], Tbl.start_point[0], Tbl.end_point[1], Tbl.end_point[0]]);
-		computing_worker.onmessage = function (event) {
-			result = event.data;
-			if (event.data == 'finish') {
-				return;
-			}
-			drawResult(result);
-			if (d.getElementById('comp_score').innerHTML * 1 < result.length - 1) {
-				d.getElementById('comp_score').innerHTML = result.length - 1;
-				maxresult = result.slice(0);
-			}
-		}
-		rg_popup_2.style.visibility = "visible";
-		handle = setInterval(function () {
-			rg_ava.style.transform = "rotate(" + rg_function(rg_rotation++) + "deg)";
-			rg_finding.style.color = rg_rotation % 10 < 5 ? '#fc0' : 'transparent';
-			if (result == 'finish') {
-				pauseCalc();
-			}
-		}, 50);
-	}
-
-	function rg_rotation_mode_0(t) { return rg_hanging_angle; }
-	function rg_rotation_mode_1(t) { return t * 5; }
-	function rg_rotation_mode_2(t) { return 45 * Math.sin(t * .4); }
-	function rg_rotation_mode_3(t) { return 45 * Math.sin(5 * Math.sin(t / 10)); }
-
-	function rg_change_mode() {
-		let radios = d.getElementsByName('rg_mode'), epic = 'stable';
-		for (let i = 0; i < radios.length; ++i)
-			if (radios[i].checked)
-				epic = radios[i].value;
-		switch (epic) {
-			case 'rotating': rg_function = rg_rotation_mode_1; break;
-			case 'digging': rg_function = rg_rotation_mode_2; break;
-			case 'dancing': rg_function = rg_rotation_mode_3; break;
-			default:
-				rg_hanging_angle = (
-					rg_last_mode == 'rotating' ? rg_rotation_mode_1 :
-						rg_last_mode == 'digging' ? rg_rotation_mode_2 :
-							rg_last_mode == 'dancing' ? rg_rotation_mode_3 :
-								rg_rotation_mode_0
-				)(rg_rotation);
-				rg_function = rg_rotation_mode_0;
-		}
-		rg_last_mode = epic;
-	}
-</script>
 
 </html>
