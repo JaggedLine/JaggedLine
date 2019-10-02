@@ -10,6 +10,7 @@ html, body {
 
 .field-col {
     background-image: linear-gradient(60deg, #cff5f5, #e9feff);
+    /*background: #fff8f3;*/
 }
 
 .settings-col {
@@ -44,6 +45,10 @@ input:focus
 }
 
 .segment {
+    position: absolute;
+}
+
+.grid {
     position: absolute;
 }
 
