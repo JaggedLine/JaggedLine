@@ -52,9 +52,13 @@ class Table
 		this.segment_color = opt.segment_color || 'green';
 
 		this.node_radius = opt.node_radius || 15;
+		this.clickable_node_radius = opt.clickable_node_radius || this.node_radius;
+		this.node_border_radius = opt.node_border_radius || 0;
 		this.node_color = opt.node_color || 'green';
+		this.node_border_color = opt.node_border_color || this.node_color;
 		this.hover_node_color = opt.hover_node_color || 'grey';
 		this.used_node_color = opt.used_node_color || this.node_color;
+		this.used_node_border_color = opt.used_node_border_color || this.node_border_color;
 		this.start_node_color = opt.start_node_color || 'red';
 		this.end_node_color = opt.end_node_color || 'black';
 
@@ -64,6 +68,10 @@ class Table
 		this.delete_segment_color = opt.delete_segment_color || this.segment_color;
 
 		this.show_score = opt.show_score === undefined ? true : opt.show_score;
+
+		this.show_grid = opt.show_grid === undefined ? false : opt.show_grid;
+		this.grid_color = opt.grid_color || 'yellow';
+		this.grid_width = opt.grid_width || 10;
 
 		let table = this;
 		this.draw_segment_animations = {
@@ -159,10 +167,12 @@ class Table
 				let x1 = table.points[table.lines_cnt() - 1][0] * table.sz, y1 = table.points[table.lines_cnt() - 1][1] * table.sz;
 
 				function timer(t) {
+					if (t == 1) {
+						table.points.pop();
+						table.update_screen();
+					} 
 					if (t <= 0) {
-						segments.removeChild(table.segment(table.lines_cnt() - 1));
-						let xy = table.points.pop();
-						table.node(xy[1], xy[0]).style.background = table.node_color;
+						segments.removeChild(table.segment(table.lines_cnt()));
 						table.update_score();
 						table.update_screen();
 						if (N > 1) {
@@ -228,15 +238,21 @@ class Table
 		return document.getElementById('node_' + this.id + '_' + x + '_' + y);
 	}
 
+	clicknode(x, y) {
+		return document.getElementById('clicknode_' + this.id + '_' + x + '_' + y);
+	}
+
 	update_screen()
 	{
 		for (let x = 0; x < this.sizeX; ++x) {
 			for (let y = 0; y < this.sizeY; ++y) {
 				this.node(y, x).style.background = this.node_color;
+				this.node(y, x).style.borderColor = this.node_border_color;
 			}
 		}
 		for (let point of this.points) {
 			this.node(point[1], point[0]).style.background = this.used_node_color;
+			this.node(point[1], point[0]).style.borderColor = this.used_node_border_color;
 		}
 		for (let n = 0; n < this.lines_cnt(); n++) {
 			this.segment(n).style.background = this.segment_color;
@@ -326,20 +342,60 @@ class Table
 		}
 		for_delete = []
 		for (let child of nodes.children) {
-			if (child.getAttribute('id').startsWith('node_' + this.id + '_')) {
+			if (child.getAttribute('id').startsWith('node_' + this.id + '_') || 
+				child.getAttribute('id').startsWith('clicknode_' + this.id + '_')) {
 				for_delete.push(child)
 			}
 		}
 		for (let child of for_delete) {
 			nodes.removeChild(child);
 		}
+		for_delete = []
+		for (let child of grid.children) {
+			if (child.getAttribute('id').startsWith('gridline_' + this.id + '_')) {
+				for_delete.push(child)
+			}
+		}
+		for (let child of for_delete) {
+			grid.removeChild(child);
+		}
 
-		this.start_point = start_point;
-		this.end_point = end_point;
-		this.points = [start_point];
+		this.start_point = [Math.min(start_point[0], x - 1), Math.min(start_point[1], y - 1)];
+		this.end_point = [Math.min(end_point[0], x - 1), Math.min(end_point[1], y - 1)];
+		this.points = [this.start_point];
 		this.sizeX = x; this.sizeY = y;
 
 		this.busy = false;
+
+		if (this.show_grid) {
+			for (let i = 0; i < y; ++i) {
+				addElement(grid, 'div', 
+				{
+					top: `${i * this.sz + this.node_radius - this.grid_width/2}px`,
+					left: `${this.node_radius - this.grid_width/2}px`,
+					background: this.grid_color,
+					width: `${(this.sizeX - 1) * this.sz + this.grid_width}px`,
+					height: `${this.grid_width}px`
+				}, {
+					id: `gridline_${this.id}_y${i}`,
+					class: 'grid'
+				})	
+			}
+			for (let j = 0; j < x; ++j) {
+				addElement(grid, 'div', 
+				{
+					left: `${j * this.sz + this.node_radius - this.grid_width/2}px`,
+					top: `${this.node_radius - this.grid_width/2}px`,
+					background: this.grid_color,
+					height: `${(this.sizeY - 1) * this.sz + this.grid_width}px`,
+					width: `${this.grid_width}px`
+				}, {
+					id: `gridline_${this.id}_x${j}`,
+					class: 'grid'
+				})	
+			}
+		}
+
 
 		for (let i = 0; i < y; ++i) {
 			for (let j = 0; j < x; ++j) {
@@ -349,12 +405,31 @@ class Table
 						top: `${y_pos}px`,
 						left: `${x_pos}px`,
 						background: this.node_color,
-						width: `${this.node_radius * 2}px`,
-						height: `${this.node_radius * 2}px`
+						// width: `${(this.node_radius - this.node_border_radius) * 2}px`,
+						// height: `${(this.node_radius - this.node_border_radius) * 2}px`,
+						width: `${(this.node_radius) * 2}px`,
+						height: `${(this.node_radius) * 2}px`,
+						border: `${this.node_border_radius}px solid ${this.node_border_color}`
 					}, {
-					id: `node_${this.id}_${i}_${j}`,
-					class: 'node'
-				});
+						id: `node_${this.id}_${i}_${j}`,
+						class: 'node'
+					});
+			}
+		}
+		for (let i = 0; i < y; ++i) {
+			for (let j = 0; j < x; ++j) {
+				let y_pos = i * this.sz, x_pos = j * this.sz;
+				let node = addElement(nodes, 'div',
+					{
+						top: `${y_pos - this.clickable_node_radius + this.node_radius}px`,
+						left: `${x_pos - this.clickable_node_radius + this.node_radius}px`,
+						background: 'transparent',
+						width: `${(this.clickable_node_radius) * 2}px`,
+						height: `${(this.clickable_node_radius) * 2}px`,
+					}, {
+						id: `clicknode_${this.id}_${i}_${j}`,
+						class: 'node'
+					});
 				let table = this;
 				node.onmouseover = function () {
 					if (!table.busy) {
@@ -369,11 +444,11 @@ class Table
 		for (let i = 0; i < y; ++i) {
 			for (let j = 0; j < x; ++j) {
 				let table = this;
-				this.node(i, j).onclick = function () { if (!table.busy) f_click(j, i, table) };
+				this.clicknode(i, j).onclick = function () { if (!table.busy) f_click(j, i, table) };
 			}
 		}
-		this.node(start_point[1], start_point[0]).style.background = this.start_node_color;
-		this.node(end_point[1], end_point[0]).style.background = this.end_node_color;
+		this.node(this.start_point[1], this.start_point[0]).style.background = this.start_node_color;
+		this.node(this.end_point[1], this.end_point[0]).style.background = this.end_node_color;
 	}
 
 	add_segment(x, y, animation_mode = this.draw_segment_animations.no_animation) {
@@ -487,6 +562,25 @@ function f_click_2(j, i, table)
 			table.clear_table();
 		}, 300);
 	}
+}
+
+let yura_styles = {
+	node_color: 'transparent',
+	used_node_color: 'rgba(50, 50, 255, 0.9)',
+	delete_node_color: 'rgba(255, 110, 110, 0.9)',
+	segment_color: 'black',
+	start_node_color: 'black',
+	segment_height: 5,
+	delete_segment_color: 'rgba(255, 127, 127, 0.9)',
+	show_grid: true,
+	grid_color: '#ffc79b',
+	grid_width: 4,
+	node_radius: 7,
+	node_border_radius: 4,
+	node_border_color: 'transparent',
+	used_node_border_color: 'black',
+	used_node_color: 'white',
+	clickable_node_radius: 20
 }
 
 let Tbl = new Table({
