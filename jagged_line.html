@@ -24,7 +24,7 @@
 						<h2>Мега-эпик игра</h2>
 					</div>
 					<div class="ml-auto m-4">
-						<button class="btn btn-lg btn-link">Правила</button>
+						<button class="btn btn-lg btn-link" data-toggle="modal" data-target="#rules">Правила</button>
 					</div>
 				</div>
 				<br>
@@ -34,7 +34,7 @@
 				</div>
 			</div>
 			<div class="col-lg-3 p-4 settings-col">
-				<form autocomplete="off">
+				<!-- <form autocomplete="off"> -->
 					<h2 class="text-center m-4">Настройки</h2>
 					<br>
 					<div class="form-group row">
@@ -75,11 +75,50 @@
 						<button class="btn btn-primary mr-4 my-3" id="changeSettings">Применить</button>
 						<!-- <h6 class="text-danger my-auto">Размеры не должны превышать 20!</h6> -->
 					</div>
-				</form>
+				<!-- </form> -->
 				<hr>
 				<div class="m-1">
 					<h4>Score: <span id="score">0</span></h4>
 				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="rules">
+		<div class="modal-lg modal-dialog centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Правила</h5>
+					<button class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>
+						Вам необходимо построить ломаную из
+						<span class="fa fa-circle text-danger"></span>
+						в
+						<span class="fa fa-circle"></span>.
+						Каждое звено - это ход коня, и ломаная не должна самопересекаться.
+						Вы можете удалить часть ломаной начиная с некоторой её вершины, нажав на неё.
+						
+					</p>
+					<p>
+						Ваша задача - сделать ломаную как можно длиннее.
+					</p>
+					<p>
+						УДАЧИ!!!
+					</p>
+					<div class="d-flex flex-wrap">
+						<div class="ml-auto m-2 text-center">
+							<img src="example1.gif" style="height: 200px">
+						</div>
+						<div class="mr-auto m-2 text-center">
+							<img src="example2.gif" style="height: 200px">
+						</div>
+					</div>
+					<div class="text-center"></div>
+				</div>
+				<dov class="modal-footer">
+					<button class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+				</dov>
 			</div>
 		</div>
 	</div>
