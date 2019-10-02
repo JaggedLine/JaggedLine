@@ -35,6 +35,12 @@ function addElement(parent, tag, style, opt)
 	return elem;
 }
 
+function setStyles(elem, style) {
+	for (let prop in style) {
+		elem.style[prop] = style[prop]
+	}
+}
+
 
 class Table
 {
@@ -157,7 +163,7 @@ class Table
 			no_animation: function (N) {
 				segments.removeChild(table.segment(table.lines_cnt() - 1));
 				table.update_score();
-				table.update_screen();
+				table.update_colors();
 				if (N > 1) { table.destroy_segment_animation.no_animation(N - 1); }
 			},
 			linear_animation: function (N, past = 0) {
@@ -169,12 +175,12 @@ class Table
 				function timer(t) {
 					if (t == 1) {
 						table.points.pop();
-						table.update_screen();
+						table.update_colors();
 					} 
 					if (t <= 0) {
 						segments.removeChild(table.segment(table.lines_cnt()));
 						table.update_score();
-						table.update_screen();
+						table.update_colors();
 						if (N > 1) {
 							table.destroy_segment_animation.linear_animation(N - 1, past + 1);
 						} else {
@@ -202,7 +208,7 @@ class Table
 						segments.removeChild(table.segment(table.lines_cnt() - 1));
 						table.points.pop();
 						table.update_score();
-						this.update_screen();
+						this.update_colors();
 						if (N > 1) {
 							table.destroy_segment_animation.lesha_animation(N - 1, past + 1);
 						} else {
@@ -242,7 +248,11 @@ class Table
 		return document.getElementById('clicknode_' + this.id + '_' + x + '_' + y);
 	}
 
-	update_screen()
+	gridline(dir, x) {
+		return document.getElementById('gridline_' + this.id + '_' + dir + x);
+	}
+
+	update_colors()
 	{
 		for (let x = 0; x < this.sizeX; ++x) {
 			for (let y = 0; y < this.sizeY; ++y) {
@@ -275,6 +285,64 @@ class Table
 		}
 		if (this.start_point) { this.node(this.start_point[1], this.start_point[0]).style.background = this.start_node_color };
 		if (this.end_point) { this.node(this.end_point[1], this.end_point[0]).style.background = this.end_node_color };
+	}
+
+	update_positions () {
+		for (let i = 0; i < this.sizeY; ++i) {
+			for (let j = 0; j < this.sizeX; ++j) {
+				let y_pos = i * this.sz, x_pos = j * this.sz;
+				setStyles(this.node(i, j),
+					{
+						top: `${y_pos}px`,
+						left: `${x_pos}px`
+					});
+			}
+		}
+		for (let i = 0; i < this.sizeY; ++i) {
+			for (let j = 0; j < this.sizeX; ++j) {
+				let y_pos = i * this.sz, x_pos = j * this.sz;
+				setStyles(this.clicknode(i, j),
+					{
+						top: `${y_pos - this.clickable_node_radius + this.node_radius}px`,
+						left: `${x_pos - this.clickable_node_radius + this.node_radius}px`
+					});
+			}
+		}
+		for (let n = 0; n < this.lines_cnt(); ++n) {
+			let x1 = this.points[n][0]*this.sz, y1 = this.points[n][1]*this.sz;
+			let x2 = this.points[n + 1][0]*this.sz, y2 = this.points[n + 1][1]*this.sz; 
+			let xc = (x1 + x2) / 2, yc = (y1 + y2) / 2;
+			let len = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + this.segment_height;
+			let ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+			setStyles(this.segment(n),
+				{
+					transform: `rotate(${ang}deg)`,
+					width: `${len}px`,
+					height: `${this.segment_height}px`,
+					top: `${yc + this.node_radius - this.segment_height / 2}px`,
+					left: `${xc - len / 2 + this.node_radius}px`,
+				});
+		}
+		if (this.show_grid) {
+			for (let i = 0; i < this.sizeY; ++i) {
+				setStyles(this.gridline('y', i),
+				{
+					top: `${i * this.sz + this.node_radius - this.grid_width/2}px`,
+					left: `${this.node_radius - this.grid_width/2}px`,
+					width: `${(this.sizeX - 1) * this.sz + this.grid_width}px`,
+					height: `${this.grid_width}px`
+				})	
+			}
+			for (let j = 0; j < this.sizeX; ++j) {
+				setStyles(this.gridline('x', j), 
+				{
+					left: `${j * this.sz + this.node_radius - this.grid_width/2}px`,
+					top: `${this.node_radius - this.grid_width/2}px`,
+					height: `${(this.sizeY - 1) * this.sz + this.grid_width}px`,
+					width: `${this.grid_width}px`
+				})	
+			}
+		}
 	}
 
 	lines_cnt() {
@@ -311,7 +379,7 @@ class Table
 		}
 		this.points = [this.start_point];
 		this.update_score();
-		this.update_screen();
+		this.update_colors();
 	}
 
 	delete_table()
@@ -405,8 +473,6 @@ class Table
 						top: `${y_pos}px`,
 						left: `${x_pos}px`,
 						background: this.node_color,
-						// width: `${(this.node_radius - this.node_border_radius) * 2}px`,
-						// height: `${(this.node_radius - this.node_border_radius) * 2}px`,
 						width: `${(this.node_radius) * 2}px`,
 						height: `${(this.node_radius) * 2}px`,
 						border: `${this.node_border_radius}px solid ${this.node_border_color}`
@@ -434,10 +500,10 @@ class Table
 				node.onmouseover = function () {
 					if (!table.busy) {
 						table.covered_node = [j, i];
-						table.update_screen();
+						table.update_colors();
 					}
 				};
-				node.onmouseout = function () { table.covered_node = 0; table.update_screen() };
+				node.onmouseout = function () { table.covered_node = 0; table.update_colors() };
 				// nodes.innerHTML += '<div id="node_' + i + '_' + j + '" class="node" style="top: ' + y_pos + 'px; left: ' + x_pos + 'px"></div>';
 			}
 		}
@@ -456,7 +522,7 @@ class Table
 		let last_y = this.points[this.lines_cnt()][1];
 		animation_mode(last_x * this.sz, last_y * this.sz, x * this.sz, y * this.sz);
 		this.points.push([x, y]);
-		this.update_screen();
+		this.update_colors();
 		this.update_score();
 
 	}
@@ -470,7 +536,7 @@ class Table
 			}
 		}
 		this.update_score();
-		this.update_screen();
+		this.update_colors();
 		return false;
 	}
 }
@@ -583,13 +649,34 @@ let yura_styles = {
 	clickable_node_radius: 20
 }
 
-let Tbl = new Table({
+let Tbl = new Table(
+{
 	node_color: 'rgba(0, 96, 57, 0.9)',
 	used_node_color: 'rgba(50, 50, 255, 0.9)',
 	delete_node_color: 'rgba(255, 110, 110, 0.9)',
 	segment_color: 'rgba(64, 64, 255, 0.9)',
 	delete_segment_color: 'rgba(255, 127, 127, 0.9)',
-});
+}
+// yura_styles
+);
+
+
+document.getElementsByTagName("body")[0].onresize = update_table_size
+// field.onresize = function()
+function update_table_size()
+{
+	field_width = window.getComputedStyle(fieldSize,null).getPropertyValue('width');
+	field_width = field_width.slice(0, field_width.length - 2)
+	field_height = window.getComputedStyle(fieldSize,null).getPropertyValue('height');
+	field_header_height = window.getComputedStyle(fieldHeaderSize,null).getPropertyValue('height');
+	field_header_height = field_header_height.slice(0, field_header_height.length - 2)
+	field_height = field_height.slice(0, field_height.length - 2)
+	console.log(field_width, field_height, Tbl.sizeX, (field_width - 10) / (Tbl.sizeX*1 + 1), (field_width - 10) / (Tbl.sizeX))
+	sz = Math.min((field_width - 2*Tbl.node_radius) / (Tbl.sizeX*1 + 2), (field_height - field_header_height - 2*Tbl.node_radius) / (Tbl.sizeY*1 + 2));
+	console.log(sz);
+	Tbl.sz = sz;
+	Tbl.update_positions();
+};
 
 function initTable() {
 	Tbl.generate_table(
@@ -598,6 +685,7 @@ function initTable() {
 		[inputStartX.value, inputStartY.value],
 		[inputEndX.value, inputEndY.value],
 	);
+	update_table_size()
 }
 
 initTable();
