@@ -347,6 +347,13 @@ class Table
         }
     }
 
+    resize(xLength, yLength) {
+        let xsz = (xLength - this.node_radius * 2) / (this.sizeX - 1);
+        let ysz = (yLength - this.node_radius * 2) / (this.sizeY - 1);
+        this.sz = Math.min(xsz , ysz);
+        this.update_positions();
+    }
+
     lines_cnt() {
         return this.points.length - 1;
     }
@@ -433,7 +440,7 @@ class Table
         this.start_point = [Math.min(start_point[0], x - 1), Math.min(start_point[1], y - 1)];
         this.end_point = [Math.min(end_point[0], x - 1), Math.min(end_point[1], y - 1)];
         this.points = [this.start_point];
-        this.sizeX = x; this.sizeY = y;
+        this.sizeX = x*1; this.sizeY = y*1;
 
         this.busy = false;
 
@@ -573,34 +580,34 @@ function f_click_1(j, i, table)
     table.add_segment(j, i, table.draw_segment_animations.linear_animation);
 
     table.onwin = function(table) {
-    	data.setAttribute('score', table.lines_cnt());
-    	data.setAttribute('points', JSON.stringify(table.points));
-    	submit_score.innerHTML = table.lines_cnt();
-    	setTimeout(function() {
-    		alert('Your score '+table.lines_cnt());
-    		table.clear_table();
-    		table.win = false;
-    	}, 300)
-    }
-}
+        setTimeout(function () {
+            alert(student_name.value + ', your score is ' + table.lines_cnt());
 
-let yura_styles = {
-	node_color: 'transparent',
-	used_node_color: 'rgba(50, 50, 255, 0.9)',
-	delete_node_color: 'rgba(255, 110, 110, 0.9)',
-	segment_color: 'black',
-	start_node_color: 'black',
-	segment_height: 5,
-	delete_segment_color: 'rgba(255, 127, 127, 0.9)',
-	show_grid: true,
-	grid_color: '#ffc79b',
-	grid_width: 4,
-	node_radius: 7,
-	node_border_radius: 4,
-	node_border_color: 'transparent',
-	used_node_border_color: 'black',
-	used_node_color: 'white',
-	clickable_node_radius: 20
+            let tr = addElement(scores, 'tr');
+            addElement(tr, 'td', { 'text-align': 'center' }, { id: `game_${table.games_cnt}` }).innerHTML = table.games_cnt;
+            addElement(tr, 'td', {}, {}).innerHTML = student_name.value;
+            let td = addElement(tr, 'td', { 'text-align': 'center' }, {});
+            td.innerHTML = table.lines_cnt();
+            addElement(td, 'button',
+                {
+                    float: 'right',
+                    'background': 'white url(eye.png)',
+                    'background-size': '100%',
+                    width: '30px',
+                    height: '30px'
+                }, {
+                id: `show_path_${table.games_cnt++}`
+            });
+
+            document.getElementById('game_' + (table.games_cnt - 1)).setAttribute('jagged_line', JSON.stringify({ x: table.sizeX, y: table.sizeY, points: table.points }));
+            for (let i = 0; i < table.games_cnt; i++) {
+                document.getElementById('show_path_' + i).addEventListener('mousedown', function () { xxx = showPath(i); yyy = true; })
+            }
+            document.addEventListener('mouseup', function () { if (yyy) { hidePath(xxx); yyy = false } })
+            student_name.value = student_name.value == 'Vanyok' ? 'Feduk' : student_name.value == 'Feduk' ? 'Lesha' : 'Vanyok';
+            table.clear_table();
+        }, 300)
+    }
 }
 
 let Tbl = new Table(
@@ -611,7 +618,6 @@ let Tbl = new Table(
 	segment_color: 'rgba(64, 64, 255, 0.9)',
 	delete_segment_color: 'rgba(255, 127, 127, 0.9)',
 }
-// yura_styles
 );
 
 
@@ -620,16 +626,13 @@ document.getElementsByTagName("body")[0].onresize = update_table_size
 function update_table_size()
 {
 	field_width = window.getComputedStyle(fieldSize,null).getPropertyValue('width');
-	field_width = field_width.slice(0, field_width.length - 2)
+	field_width = field_width.slice(0, field_width.length - 2);
 	field_height = window.getComputedStyle(fieldSize,null).getPropertyValue('height');
 	field_header_height = window.getComputedStyle(fieldHeaderSize,null).getPropertyValue('height');
-	field_header_height = field_header_height.slice(0, field_header_height.length - 2)
-	field_height = field_height.slice(0, field_height.length - 2)
-	console.log(field_width, field_height, Tbl.sizeX, (field_width - 10) / (Tbl.sizeX*1 + 1), (field_width - 10) / (Tbl.sizeX))
-	sz = Math.min((field_width - 2*Tbl.node_radius) / (Tbl.sizeX*1 + 2), (field_height - field_header_height - 2*Tbl.node_radius) / (Tbl.sizeY*1 + 2));
-	console.log(sz);
-	Tbl.sz = sz;
-	Tbl.update_positions();
+	field_header_height = field_header_height.slice(0, field_header_height.length - 2);
+	field_height = field_height.slice(0, field_height.length - 2);
+    console.log()
+    Tbl.resize(field_width - 100, field_height - field_header_height - 100);
 };
 
 function initTable() {
@@ -639,7 +642,8 @@ function initTable() {
 		[inputStartX.value, inputStartY.value],
 		[inputEndX.value, inputEndY.value],
 	);
-	update_table_size()
+    // Tbl.resize(500, 500)
+    update_table_size();
 }
 
 initTable();
