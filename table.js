@@ -735,7 +735,9 @@ function f_click_1(j, i, table)
 
 	if ((i - last_y) ** 2 + (j - last_x) ** 2 - 5) {
 		// alert('Distance should be ~' + Math.sqrt(5) + '!');
-		Table.pulseNodeAnimation([256, 0, 0], 300, 10)(table.node(i, j));
+		if (!(j == table.points[table.points.length - 1][0] && i == table.points[table.points.length - 1][1])) {
+			Table.pulseNodeAnimation([256, 0, 0], 300, 10)(table.node(i, j));
+		}
 		return;
 	}
 
