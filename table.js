@@ -128,7 +128,7 @@ class Table
 				'border-radius': `${table.segment_height / 2}px`
 			},
 			{
-				id: `segment_${table.id}_${table.lines_cnt()}`,
+				id: `segment_${table.id}_${table.lines_cnt}`,
 				class: `segment`
 			});
 	}
@@ -144,7 +144,7 @@ class Table
 				height: `${table.segment_height}px`,
 				'border-radius': `${table.segment_height / 2}px`
 			}, {
-			id: 'segment_' + table.id + '_' + table.lines_cnt(),
+			id: 'segment_' + table.id + '_' + table.lines_cnt,
 			class: 'segment'
 		});
 
@@ -178,7 +178,7 @@ class Table
 				transform: 'rotate(' + ang + 'deg)',
 				height: table.segment_height
 			}, {
-			id: 'segment_' + table.id + '_' + table.lines_cnt(),
+			id: 'segment_' + table.id + '_' + table.lines_cnt,
 			class: 'segment'
 		});
 
@@ -206,7 +206,7 @@ class Table
 
 	static destroySegmentAnimation(table, N)
 	{
-		segments.removeChild(table.segment(table.lines_cnt() - 1));
+		segments.removeChild(table.segment(table.lines_cnt - 1));
 		table.update_score();
 		table.update_colors();
 		if (N > 1) { 
@@ -217,11 +217,11 @@ class Table
 	static destroySegmentLinearAnimation(table, N, _past = 0)
 	{
 				table.busy = true;
-				let segment = table.segment((table.lines_cnt() - 1));
-				let x2 = table.points[table.lines_cnt()][0] * table.gridStep; 
-				let y2 = table.points[table.lines_cnt()][1] * table.gridStep;
-				let x1 = table.points[table.lines_cnt() - 1][0] * table.gridStep; 
-				let y1 = table.points[table.lines_cnt() - 1][1] * table.gridStep;
+				let segment = table.segment((table.lines_cnt - 1));
+				let x2 = table.points[table.lines_cnt][0] * table.gridStep; 
+				let y2 = table.points[table.lines_cnt][1] * table.gridStep;
+				let x1 = table.points[table.lines_cnt - 1][0] * table.gridStep; 
+				let y1 = table.points[table.lines_cnt - 1][1] * table.gridStep;
 
 				function timer(t) {
 					if (t == 1) {
@@ -229,7 +229,7 @@ class Table
 						table.update_colors();
 					} 
 					if (t <= 0) {
-						segments.removeChild(table.segment(table.lines_cnt()));
+						segments.removeChild(table.segment(table.lines_cnt));
 						table.update_score();
 						table.update_colors();
 						if (N > 1) {
@@ -260,7 +260,7 @@ class Table
 	static destroySegmentLeshaAnimation(table, N)
 	{
 				table.busy = true;
-				let segment = table.segment((table.lines_cnt() - 1));
+				let segment = table.segment((table.lines_cnt - 1));
 				let x2 = table.points[table.lines_cnt()][0] * table.gridStep; 
 				let y2 = table.points[table.lines_cnt()][1] * table.gridStep;
 				let x1 = table.points[table.lines_cnt() - 1][0] * table.gridStep; 
@@ -271,8 +271,9 @@ class Table
 						table.points.pop();
 						table.update_colors();
 					} 
+
 					if (t <= 0) {
-						segments.removeChild(table.segment(table.lines_cnt()));
+						segments.removeChild(table.segment(table.lines_cnt));
 						table.update_score();
 						table.update_colors();
 						if (N > 1) {
@@ -282,9 +283,11 @@ class Table
 						}
 						return;
 					}
+
 					setTimeout(function() {
 						timer(t - 0.1 * (1 + Math.min(N - t, _past + t)));
 					}, 20);
+
 					let xc = x1 * (1 - t) + ((x1 + x2) / 2) * t; 
 					let yc = y1 * (1 - t) + ((y1 + y2) / 2) * t;
 					let len = (Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) + 
@@ -294,7 +297,30 @@ class Table
 					segment.style.top = `${yc + table.node_radius - 
 						table.segment_height / 2 + table.background_border}px`;
 				}
+
 				timer(1);
+	}
+
+	static pulseNodeAnimation(color, time, finalRadius)
+	{
+		return function(node) {
+			function timer(t) {
+				if (t <= 0) {
+					node.style.boxShadow = 'none';
+					// node.style.opacity = 1;
+					return;
+				}
+
+				setTimeout(function() {
+					timer(t - 20 / time)
+				}, 20)
+
+				node.style.boxShadow = `0 0 0 ${finalRadius * (1 - t**1.5)}px rgba(${color[0]}, ${color[1]}, ${color[2]}, ${t})`;
+				// node.style.opacity = t;
+			}
+
+			timer(1)
+		}
 	}
 
 	make_busy() {
@@ -321,6 +347,10 @@ class Table
 		return document.getElementById('gridline_' + this.id + '_' + dir + x);
 	}
 
+	get lines_cnt() {
+		return this.points.length - 1;
+	}
+
 	update_colors()
 	{
 		for (let x = 0; x < this.sizeX; ++x) {
@@ -337,7 +367,7 @@ class Table
 				this.used_node_border_color;
 		}
 
-		for (let n = 0; n < this.lines_cnt(); n++) {
+		for (let n = 0; n < this.lines_cnt; n++) {
 			this.segment(n).style.background = this.segment_color;
 		}
 
@@ -396,7 +426,7 @@ class Table
 					});
 			}
 		}
-		for (let n = 0; n < this.lines_cnt(); ++n) {
+		for (let n = 0; n < this.lines_cnt; ++n) {
 			let x1 = this.points[n][0]*this.gridStep
 			let y1 = this.points[n][1]*this.gridStep;
 			let x2 = this.points[n + 1][0]*this.gridStep;
@@ -463,13 +493,9 @@ class Table
 		this.update_background();
 	}
 
-	lines_cnt() {
-		return this.points.length - 1;
-	}
-
 	update_score() {
 		if (this.show_score) {
-			score.innerHTML = this.lines_cnt();
+			score.innerHTML = this.lines_cnt;
 		}
 	}
 
@@ -658,8 +684,8 @@ class Table
 
 	add_segment(x, y, animation = this.drawSegmentAnimation) {
 		if (!this.win) {
-			let last_x = this.points[this.lines_cnt()][0];
-			let last_y = this.points[this.lines_cnt()][1];
+			let last_x = this.points[this.lines_cnt][0];
+			let last_y = this.points[this.lines_cnt][1];
 			animation(this, 
 				last_x * this.gridStep, last_y * this.gridStep, 
 				x * this.gridStep, y * this.gridStep);
@@ -676,9 +702,9 @@ class Table
 	destroy_segments(x, y, animation = this.destroySegmentAnimation)
 	{
 		if (!this.win) {
-			for (let n = 0; n < this.lines_cnt(); ++n) {
+			for (let n = 0; n < this.lines_cnt; ++n) {
 				if (x == this.points[n][0] && y == this.points[n][1]) {
-					animation(this, this.lines_cnt() - n);
+					animation(this, this.lines_cnt - n);
 					return true;
 				}
 			}
@@ -691,9 +717,9 @@ class Table
 
 function f_click_1(j, i, table)
 {
-	let last_x = table.points[table.lines_cnt()][0];
-	let last_y = table.points[table.lines_cnt()][1];
-	len = table.lines_cnt();
+	let last_x = table.points[table.lines_cnt][0];
+	let last_y = table.points[table.lines_cnt][1];
+	len = table.lines_cnt;
 
 	if (table.destroy_segments(j, i, Table.destroySegmentLinearAnimation)) {return}
 
@@ -702,12 +728,14 @@ function f_click_1(j, i, table)
 			table.points[n - 1][0], table.points[n - 1][1], 
 			table.points[n][0], table.points[n][1])) {
 			// alert('Intersection!!');
+			Table.pulseNodeAnimation([256, 0, 0], 300, 10)(table.node(i, j));		
 			return;
 		}
 	}
 
 	if ((i - last_y) ** 2 + (j - last_x) ** 2 - 5) {
 		// alert('Distance should be ~' + Math.sqrt(5) + '!');
+		Table.pulseNodeAnimation([256, 0, 0], 300, 10)(table.node(i, j));
 		return;
 	}
 
@@ -715,7 +743,7 @@ function f_click_1(j, i, table)
 
 	table.onwin = function(table) {
 		setTimeout(function () {
-			alert(student_name.value + ', your score is ' + table.lines_cnt());
+			alert(student_name.value + ', your score is ' + table.lines_cnt);
 
 			let tr = addElement(scores, 'tr');
 			addElement(tr, 'td', 
@@ -732,7 +760,7 @@ function f_click_1(j, i, table)
 					'text-align': 'center' 
 				}, {});
 
-			td.innerHTML = table.lines_cnt();
+			td.innerHTML = table.lines_cnt;
 
 			addElement(td, 'button',
 				{
