@@ -307,7 +307,6 @@ class Table
 			function timer(t) {
 				if (t <= 0) {
 					node.style.boxShadow = 'none';
-					// node.style.opacity = 1;
 					return;
 				}
 
@@ -315,8 +314,8 @@ class Table
 					timer(t - 20 / time)
 				}, 20)
 
-				node.style.boxShadow = `0 0 0 ${finalRadius * (1 - t**1.5)}px rgba(${color[0]}, ${color[1]}, ${color[2]}, ${t})`;
-				// node.style.opacity = t;
+				node.style.boxShadow = `0 0 0 ${finalRadius * (1 - t**1.5)}px` +
+					`rgba(${color[0]}, ${color[1]}, ${color[2]}, ${t})`;
 			}
 
 			timer(1)
