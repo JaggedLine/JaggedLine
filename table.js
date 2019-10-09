@@ -607,7 +607,8 @@ class Table
 				{
 					left: `${j * this.gridStep + this.node_radius - 
 						this.grid_width/2 + this.background_border}px`,
-					top: `${this.node_radius - this.grid_width/2 + this.background_border}px`,
+					top: `${this.node_radius - this.grid_width/2 + 
+						this.background_border}px`,
 					background: this.grid_color,
 					height: `${(this.sizeY - 1) * this.gridStep + 
 						this.grid_width}px`,
@@ -734,7 +735,8 @@ function f_click_1(j, i, table)
 
 	if ((i - last_y) ** 2 + (j - last_x) ** 2 - 5) {
 		// alert('Distance should be ~' + Math.sqrt(5) + '!');
-		if (!(j == table.points[table.points.length - 1][0] && i == table.points[table.points.length - 1][1])) {
+		if (!(j == table.points[table.points.length - 1][0] && 
+			i == table.points[table.points.length - 1][1])) {
 			Table.pulseNodeAnimation([256, 0, 0], 300, 10)(table.node(i, j));
 		}
 		return;
