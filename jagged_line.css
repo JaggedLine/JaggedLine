@@ -2,15 +2,8 @@ html, body {
     height: 100%;
 }
 
-#field {
-    position: relative;
-    width: 100%;
-    height: 500px;
-}
-
 .field-col {
     background-image: linear-gradient(60deg, #cff5f5, #e9feff);
-    /*background: #fff8f3;*/
 }
 
 .settings-col {
@@ -38,10 +31,13 @@ input:focus
     color: #5996e0 !important;
 }
 
+/* Field classes */
+
 .node {
     position: absolute;
     border-radius: 50%;
     background-size: 100% !important;
+    border-width: 0;
 }
 
 .segment {
@@ -50,6 +46,11 @@ input:focus
 
 .grid {
     position: absolute;
+}
+
+.field {
+    position: relative;
+    background: #fffefe;
 }
 
 /*

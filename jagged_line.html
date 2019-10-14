@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="jagged_line.css">
-	<link rel="shortcut icon" href="eye.png">
+	<link rel="shortcut icon" href="Images/cross.png">
 
 	<title>Jagged line</title>
 </head>
@@ -18,8 +18,8 @@
 <body>
 	<div class="container-fluid h-100">
 		<div class="row h-100">
-			<div class="col-lg-9 px-5 py-4 field-col" id="fieldSize">
-				<div class="d-flex flex-wrap" id="fieldHeaderSize">
+			<div class="col-lg-9 px-5 py-4 field-col">
+				<div class="d-flex flex-wrap">
 					<div class="mr-auto m-4">
 						<h2>Мега-эпик игра</h2>
 					</div>
@@ -28,10 +28,13 @@
 					</div>
 				</div>
 				<br>
-				<div id="field">
-					<div id="grid"></div>
-					<div id="segments"></div>
-					<div id="nodes"></div>
+				<div class="d-flex">
+					<div class="field" id="field">
+						<div id="grid"></div>
+						<div id="segments"></div>
+						<div id="nodes"></div>
+						<div id="data"></div>
+					</div>
 				</div>
 			</div>
 			<div class="col-lg-3 p-4 settings-col">
@@ -109,10 +112,10 @@
 					</p>
 					<div class="d-flex flex-wrap">
 						<div class="ml-auto m-2 text-center">
-							<img src="example1.gif" style="height: 200px">
+							<img src="Images/example1.gif" style="height: 200px">
 						</div>
 						<div class="mr-auto m-2 text-center">
-							<img src="example2.gif" style="height: 200px">
+							<img src="Images/example2.gif" style="height: 200px">
 						</div>
 					</div>
 					<div class="text-center"></div>
@@ -126,7 +129,11 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<script src="table.js"></script>
+	<script src="Chain-Field/common.js"></script>
+    <script src="Chain-Field/animations.js"></script>
+    <script src="Chain-Field/games.js"></script>
+	<script src="Chain-Field/ChainField.js"></script>
+	<script src="Scripts/initChainField.js"></script>
 </body>
 
 </html>
