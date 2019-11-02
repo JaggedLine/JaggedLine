@@ -29,19 +29,11 @@ let personalFieldStyle = {
 let chainField = new ChainField(personalFieldStyle);
 
 chainField.onchange = function() {
-	// if (!this.win) {
-    //     document.getElementById('submit_button').setAttribute('disabled', '');
-    //     document.getElementById('submit_it').setAttribute('hidden', '');
-    // }	
-    // else {
-    //     document.getElementById('submit_button').removeAttribute('disabled');
-    //     document.getElementById('submit_it').removeAttribute('hidden');
-    // }
+    if (this.win) {
+        prompt('Вы победили! Настало время ввести ваше имя (прозвище, кличку)...')
+    }
     data.setAttribute('score', this.lines_cnt);
     data.setAttribute('points', JSON.stringify(this.points));
     data.setAttribute('field_size_x', this.sizeX);
     data.setAttribute('field_size_y', this.sizeY);
 }
-
-chainField.generate_table(7, 7, [3, 3], [4, 6], cfKnightGame);
-chainField.tie_to_parent();

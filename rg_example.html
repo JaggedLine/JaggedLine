@@ -16,19 +16,22 @@
 </head>
 
 <body>
+	<nav class="navbar navbar-dark bg-darkblue">
+		<div class="container-fluid">
+			<a href="rg_example.html" class="navbar-brand">
+				Мега-эпик игра
+			</a>
+			<ul class="nav navbar-nav ml-auto">
+				<li class="nav-item">
+					<button class="btn btn-link nav-link" data-toggle="modal" data-target="#rules">Правила игры</button>
+				</li>
+			</ul>
+		</div>
+	</nav>
 	<div class="container-fluid h-100">
 		<div class="row h-100">
-			<div class="col-lg-9 px-5 py-4 field-col">
-				<div class="d-flex flex-wrap">
-					<div class="mr-auto m-4">
-						<h2>Мега-эпик игра</h2>
-					</div>
-					<div class="ml-auto m-4">
-						<button class="btn btn-lg btn-link" data-toggle="modal" data-target="#rules">Правила</button>
-					</div>
-				</div>
-				<br>
-				<div class="d-flex">
+			<div class="col-lg-8 px-5 py-5 field-col">
+				<div class="d-flex h-100">
 					<div class="field" id="field">
 						<div id="grid"></div>
 						<div id="segments"></div>
@@ -37,52 +40,47 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-3 p-4 settings-col">
-				<!-- <form autocomplete="off"> -->
-					<h2 class="text-center m-4">Настройки</h2>
-					<br>
-					<div class="form-group row">
-						<div class="col-lg-6">
-							<h4 class="col-form-label-lg">Размеры поля:</h4>
-						</div>
-						<div class="col-lg-3">
-							<input class="form-control" id="inputSizeY" value="8" placeholder="Y">
-						</div>
-						<div class="col-lg-3">
-							<input class="form-control" id="inputSizeX" value="8" placeholder="X">
-						</div>
+			<div class="col-lg-4 p-4 settings-col">
+				<div class="form-group row">
+					<div class="col-lg-6">
+						<h4 class="col-form-label-lg">Размеры поля:</h4>
 					</div>
-					<div class="form-group row">
-						<div class="col-lg-6">
-							<h4 class="col-form-label-lg">Начальный узел:</h4>
-						</div>
-						<div class="col-lg-3">
-							<input class="form-control" id="inputStartY" value="0" placeholder="Y">
-						</div>
-						<div class="col-lg-3">
-							<input class="form-control" id="inputStartX" value="0" placeholder="X">
-						</div>
+					<div class="col-lg-3">
+						<input class="form-control" id="inputSizeX" value="8" placeholder="X">
 					</div>
-					<div class="form-group row">
-						<div class="col-lg-6">
-							<h4 class="col-form-label-lg">Конечный узел:</h4>
-						</div>
-						<div class="col-lg-3">
-							<input class="form-control" id="inputEndY" value="7" placeholder="Y">
-						</div>
-						<div class="col-lg-3">
-							<input class="form-control" id="inputEndX" value="7" placeholder="X">
-						</div>
+					<div class="col-lg-3">
+						<input class="form-control" id="inputSizeY" value="8" placeholder="Y">
 					</div>
-					<br>
-					<div class="d-flex flex-wrap">
-						<button class="btn btn-primary mr-4 my-3" id="changeSettings">Применить</button>
-						<!-- <h6 class="text-danger my-auto">Размеры не должны превышать 20!</h6> -->
+				</div>
+				<div class="form-group row">
+					<div class="col-lg-6">
+						<h4 class="col-form-label-lg">Начальный узел:</h4>
 					</div>
-				<!-- </form> -->
+					<div class="col-lg-3">
+						<input class="form-control" id="inputStartX" value="0" placeholder="X">
+					</div>
+					<div class="col-lg-3">
+						<input class="form-control" id="inputStartY" value="0" placeholder="Y">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-lg-6">
+						<h4 class="col-form-label-lg">Конечный узел:</h4>
+					</div>
+					<div class="col-lg-3">
+						<input class="form-control" id="inputEndX" value="7" placeholder="X">
+					</div>
+					<div class="col-lg-3">
+						<input class="form-control" id="inputEndY" value="7" placeholder="Y">
+					</div>
+				</div>
+				<div class="d-flex flex-wrap">
+					<button class="btn btn-primary mr-4 my-3" id="changeSettings" onclick="updateField()">Применить</button>
+					<h4 class="ml-auto mr-1 my-auto">Score: <span id="score">0</span></h4>
+				</div>
 				<hr>
 				<div class="m-1">
-					<h4>Score: <span id="score">0</span></h4>
+					Результаты
 				</div>
 			</div>
 		</div>
@@ -102,14 +100,9 @@
 						<span class="fa fa-circle"></span>.
 						Каждое звено - это ход коня, и ломаная не должна самопересекаться.
 						Вы можете удалить часть ломаной начиная с некоторой её вершины, нажав на неё.
-						
 					</p>
-					<p>
-						Ваша задача - сделать ломаную как можно длиннее.
-					</p>
-					<p>
-						УДАЧИ!!!
-					</p>
+					<p>Ваша задача - сделать ломаную как можно длиннее.</p>
+					<p>УДАЧИ!!!</p>
 					<div class="d-flex flex-wrap">
 						<div class="ml-auto m-2 text-center">
 							<img src="Images/example1.gif" style="height: 200px">
@@ -118,7 +111,6 @@
 							<img src="Images/example2.gif" style="height: 200px">
 						</div>
 					</div>
-					<div class="text-center"></div>
 				</div>
 				<dov class="modal-footer">
 					<button class="btn btn-primary" data-dismiss="modal">Закрыть</button>
@@ -134,6 +126,7 @@
     <script src="Chain-Field/games.js"></script>
 	<script src="Chain-Field/ChainField.js"></script>
 	<script src="Scripts/initChainField.js"></script>
+	<script src="Scripts/rg_example.js"></script>
 </body>
 
 </html>
