@@ -30,6 +30,7 @@ let chainField = new ChainField(personalFieldStyle);
 
 chainField.onchange = function() {
     if (this.win) {
+        this.make_busy()
         setTimeout(prompt, 300, 'Вы победили! Настало время ввести ваше имя (прозвище, кличку)...')
     }
     data.setAttribute('score', this.lines_cnt);
